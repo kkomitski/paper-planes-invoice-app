@@ -1,29 +1,66 @@
 import React, { useContext, useEffect, useState } from 'react';
-
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signOut,
+	sendPasswordResetEmail,
+	updateEmail,
+	updatePassword,
+} from 'firebase/auth';
 import { auth } from '../firebase-config';
 
 const AuthContext = React.createContext();
+
+const createUser = createUserWithEmailAndPassword;
+const logInUser = signInWithEmailAndPassword;
+const signOutUser = signOut;
+const resetPassword = sendPasswordResetEmail;
 
 export function useAuth() {
 	return useContext(AuthContext);
 }
 
-export default function AuthProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState([]);
+export function AuthProvider({ children }) {
+	const [currentUser, setCurrentUser] = useState();
 
 	function signup(email, password) {
-		return auth.createUserWithEmailAndAPassword(email, password);
+		return createUser(auth, email, password);
+	}
+
+	function login(email, password) {
+		return logInUser(auth, email, password);
+	}
+
+	function logout() {
+		return signOutUser(auth);
+	}
+
+	function reset(email) {
+		return resetPassword(auth, email);
+	}
+
+	function updateUserEmail(email) {
+		return updateEmail(currentUser, email);
+	}
+
+	function updateUserPassword(password) {
+		return updatePassword(currentUser, password);
 	}
 
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
+		let isMounted = true;
+		auth.onAuthStateChanged((user) => {
+			if (isMounted) {
+				setCurrentUser(user);
+			}
 		});
 
-		return unsubscribe;
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 
-	const value = { currentUser, signup };
+	const value = { currentUser, signup, login, logout, reset, updateUserEmail, updateUserPassword };
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -3,32 +3,29 @@ import React, { useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function SignUp() {
+export function Login() {
 	const emailRef = useRef();
 	const passwordRef = useRef();
-	const passwordConfirmRef = useRef();
 
-	const { signup } = useAuth();
+	const { login, currentUser } = useAuth();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+
 	const navigate = useNavigate();
+	// const [path, setPath] = useState('');
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 
-		if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-			return setError('Passwords do not match');
-		}
-
 		try {
 			setError('');
 			setLoading(true);
-			await signup(emailRef.current.value, passwordRef.current.value);
+			await login(emailRef.current.value, passwordRef.current.value);
 			navigate('/');
 		} catch (e) {
 			console.log(e.message);
-			setError('Failed to create account');
+			setError('Failed to sign-in');
 		}
 
 		setLoading(false);
@@ -38,20 +35,21 @@ export default function SignUp() {
 		<>
 			<fieldset>
 				<form onSubmit={handleSubmit}>
-					<legend>Sign Up</legend>
+					<legend>Log In</legend>
 					{error}
-					{/* {JSON.stringify(currentUser)} */}
+					{currentUser ? currentUser.email : 'noone logged'}
 					<br />
 					<label htmlFor='email'>email</label> <br />
 					<input type='text' id='email' ref={emailRef} /> <br />
 					<label htmlFor='password'>password</label> <br />
 					<input type='password' id='password' ref={passwordRef} /> <br />
-					<label htmlFor='email'>confirm password</label> <br />
-					<input type='password' id='password-confirm' ref={passwordConfirmRef} /> <br />
-					<button disabled={loading}>Sign Up</button>
+					<button disabled={loading}>Log In</button>
+					<div>
+						<Link to='/forgot-password'>Forgot Password?</Link>
+					</div>
 				</form>
 				<div className='w-100 text-center mt-2'>
-					Already have an account? <Link to='../login'>Log In</Link>
+					Need an account? <Link to='../signup'>Sign Up</Link>
 				</div>
 			</fieldset>
 		</>

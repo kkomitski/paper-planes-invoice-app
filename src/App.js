@@ -1,17 +1,19 @@
 // React
 import { React, useEffect, useState } from 'react';
 
+// Router
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 // Firebase
 import { db } from './firebase-config';
 import {
 	collection,
 	doc,
-	getDocs,
+	// getDocs,
 	addDoc,
 	updateDoc,
 	deleteDoc,
 	onSnapshot,
-	getId,
 } from 'firebase/firestore';
 
 // Styling/Bootstrap
@@ -21,7 +23,12 @@ import { Container } from 'react-bootstrap';
 
 // Components
 import SignUp from './components/SignUp';
-import AuthProvider from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+import { Dashboard } from './components/Dashboard';
+import { Login } from './components/Login';
+import { PrivateRoute } from './components/PrivateRoute';
+import { ForgotPassword } from './components/ForgotPassword';
+import { UpdateProfile } from './components/UpdateProfile';
 
 function App() {
 	const [newName, setNewName] = useState('');
@@ -66,23 +73,36 @@ function App() {
 	};
 
 	// Read
-	useEffect(() => getUsers(), []);
+	// useEffect(() => getUsers(), []);
 
 	if (loading) {
 		return <h1>loading...</h1>;
 	}
+
 	return (
 		<>
-			<AuthProvider>
-				<Container
-					className='d-flex align-items-center justify-content-center'
-					style={{ minHeight: '100vh' }}
-				>
-					<div className='w-100' style={{ maxWidth: '400px' }}>
-						<SignUp />
-					</div>
-				</Container>
-			</AuthProvider>
+			<Container
+				className='d-flex align-items-center justify-content-center'
+				style={{ minHeight: '100vh' }}
+			>
+				<div className='w-100' style={{ maxWidth: '400px' }}>
+					<Router>
+						<AuthProvider>
+							<Routes>
+								<Route exact path='/' element={<PrivateRoute />}>
+									<Route path='/' element={<Dashboard />} />
+								</Route>
+								<Route exact path='/' element={<PrivateRoute />}>
+									<Route path='/update-profile' element={<UpdateProfile />} />
+								</Route>
+								<Route exact path='/signup' element={<SignUp />} />
+								<Route exact path='/login' element={<Login />} />
+								<Route exact path='/forgot-password' element={<ForgotPassword />} />
+							</Routes>
+						</AuthProvider>
+					</Router>
+				</div>
+			</Container>
 			<div className='App'>
 				<input
 					type='text'
