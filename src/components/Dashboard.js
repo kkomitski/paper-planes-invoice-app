@@ -2,6 +2,8 @@ import { updateCurrentUser } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { collection, addDoc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 export function Dashboard() {
 	const [error, setError] = useState('');
@@ -19,6 +21,19 @@ export function Dashboard() {
 			setError('Failed to log out');
 		}
 	}
+
+	const invoiceJim = {
+		client: 'jim',
+		price: 234,
+	};
+
+	const addInvoice = async (invoice) => {
+		await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
+			invoice,
+		});
+	};
+
+	addInvoice(invoiceJim);
 
 	return (
 		<>

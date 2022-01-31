@@ -6,15 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Firebase
 import { db } from './firebase-config';
-import {
-	collection,
-	doc,
-	// getDocs,
-	addDoc,
-	updateDoc,
-	deleteDoc,
-	onSnapshot,
-} from 'firebase/firestore';
+import { collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 // Styling
 import './App.css';
@@ -28,6 +20,9 @@ import { PrivateRoute } from './components/PrivateRoute';
 import { ForgotPassword } from './components/ForgotPassword';
 import { UpdateProfile } from './components/UpdateProfile';
 
+// Auth
+import { useAuth } from './context/AuthContext';
+
 function App() {
 	const [newName, setNewName] = useState('');
 	const [newAge, setNewAge] = useState(0);
@@ -36,9 +31,10 @@ function App() {
 	// populate with content
 	const [users, setUsers] = useState([]);
 
-	// collection(database, collection)
-	// const usersRef = collection(db, 'users');
 	const usersRef = collection(db, 'users');
+
+	// const { currentUser } = useAuth()
+	// console.log(currentUser)
 
 	// Create
 	const createUser = async () => {
@@ -96,31 +92,9 @@ function App() {
 					</AuthProvider>
 				</Router>
 			</section>
-			{/* <Container
-				className='d-flex align-items-center justify-content-center'
-				style={{ minHeight: '100vh' }}
-			>
-				<div className='w-100' style={{ maxWidth: '400px' }}>
-					<Router>
-						<AuthProvider>
-							<Routes>
-								<Route exact path='/' element={<PrivateRoute />}>
-									<Route path='/' element={<Dashboard />} />
-								</Route>
-								<Route exact path='/' element={<PrivateRoute />}>
-									<Route path='/update-profile' element={<UpdateProfile />} />
-								</Route>
-								<Route exact path='/signup' element={<SignUp />} />
-								<Route exact path='/login' element={<Login />} />
-								<Route exact path='/forgot-password' element={<ForgotPassword />} />
-							</Routes>
-						</AuthProvider>
-					</Router>
-				</div>
-			</Container> */}
 
 			{/* <------- CRUD -------->  */}
-			{/* <div className='App'>
+			<div className='App'>
 				<input
 					type='text'
 					placeholder='name'
@@ -158,7 +132,7 @@ function App() {
 						</div>
 					);
 				})}
-			</div> */}
+			</div>
 		</main>
 	);
 }

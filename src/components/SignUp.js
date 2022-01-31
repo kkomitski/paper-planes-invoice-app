@@ -1,14 +1,26 @@
 import React, { useRef, useState } from 'react';
-// import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+	addDoc,
+	collection,
+	getDoc,
+	doc,
+	document,
+	addCollection,
+	documentId,
+	data,
+	serverTimestamp,
+	setDoc,
+} from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 export default function SignUp() {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const passwordConfirmRef = useRef();
 
-	const { signup } = useAuth();
+	const { signup, currentUser } = useAuth();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -24,7 +36,17 @@ export default function SignUp() {
 		try {
 			setError('');
 			setLoading(true);
-			await signup(emailRef.current.value, passwordRef.current.value);
+			// await signup(emailRef.current.value, passwordRef.current.value);
+			signup(emailRef.current.value, passwordRef.current.value).then((credentials) => {
+				setDoc(doc(db, 'users', credentials.user.email), {
+					uid: credentials.user.uid,
+					email: credentials.user.email,
+					createdAt: serverTimestamp(),
+					// invoices: addDoc(collection(db, 'users', credentials.user.email, 'Invoices')),
+				});
+				// addDoc(collection(db, 'users', credentials.user.email, 'Invoices'));
+			});
+
 			navigate('/');
 		} catch (e) {
 			console.log(e.message);
