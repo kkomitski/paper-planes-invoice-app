@@ -1,7 +1,11 @@
 import React, { useRef, useState } from 'react';
-// import { Form, Button, Card, Alert } from 'react-bootstrap';
+
+// Components
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+
+// Styles
+import '../App.css';
 
 export function Login() {
 	const emailRef = useRef();
@@ -33,24 +37,29 @@ export function Login() {
 
 	return (
 		<>
-			<fieldset>
-				<form onSubmit={handleSubmit}>
-					<legend>Log In</legend>
-					{error}
-					{currentUser ? currentUser.email : 'noone logged'}
+			<fieldset className='field'>
+				<form className='form' onSubmit={handleSubmit}>
+					<legend className='auth-title'>Login</legend>
+					<br />
+					<div className='error'>{error}</div>
+					{/* {currentUser ? currentUser.email : 'noone logged'} */}
 					<br />
 					<label htmlFor='email'>email</label> <br />
-					<input type='text' id='email' ref={emailRef} /> <br />
+					<input className='input' type='text' id='email' ref={emailRef} /> <br />
 					<label htmlFor='password'>password</label> <br />
 					<input type='password' id='password' ref={passwordRef} /> <br />
-					<button disabled={loading}>Log In</button>
+					<button className='btn' disabled={loading}>
+						Login
+					</button>
+					<br />
 					<div>
 						<Link to='/forgot-password'>Forgot Password?</Link>
 					</div>
+					<br />
+					<div className=''>
+						Need an account? <Link to='../signup'>Sign Up</Link>
+					</div>
 				</form>
-				<div className='w-100 text-center mt-2'>
-					Need an account? <Link to='../signup'>Sign Up</Link>
-				</div>
 			</fieldset>
 		</>
 	);

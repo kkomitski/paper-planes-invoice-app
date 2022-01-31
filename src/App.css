@@ -1,38 +1,156 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;300;500;700&display=swap');
+
+/* 
+================
+Variables
+================
+*/
+
+:root {
+	/* Dark theme */
+	--dark-primary: #141625;
+	--dark-element: #1f213a;
+	--dark-text-primary: #feffff;
+	--dark-text-secondary: #9496af;
+	/* Light theme */
+	--light-primary: #f8f7fc;
+	--light-element: #ffffff;
+	--light-text-primary: #3a3a3a;
+	--dark-text-secondary: #c8c7cb;
+
+	/* Main */
+	--highlight: #8362fe;
+	--highlight-2: #7c5df9;
+	--icons: #8282a5;
+	--delete: #f25c5c;
+	--paid-text: #58a799;
+	--paid-bg: #1e2d3a;
+	--pending-text: #e89127;
+	--pending-bg: #30232a;
+	--overdue-text: #df3c3c;
+	--overdure-bg: #392d30;
+	--font: 'Jost', sans-serif;
+
+	/* Elements */
+	--transition: all 0.3s linear;
+	--max-width: 1170px;
+	--radius-1: 0.25rem;
+	--radius-2: 0.5rem;
+	--primary: var(--dark-primary);
+	--element: var(--dark-element);
+	--text-primary: var(--dark-text-primary);
+	--text-secondary: var(--text-secondary);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*,
+::before,
+::after {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* 
+================
+Global Styles
+================
+*/
+
+body {
+	background-color: var(--element);
+	color: var(--text-primary);
+	font-family: var(--font);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+input {
+	padding: 0.75rem;
+	border-radius: var(--radius-2);
+	border: none;
+	background-color: var(--element) !important;
+	color: var(--text-primary);
+	font-family: var(--font);
+	font-size: 1rem;
+	border: 1px solid var(--text-primary);
 }
 
-.App-link {
-  color: #61dafb;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 30px var(--element) inset !important;
+	border: 1px solid var(--text-primary);
+	box-sizing: border-box;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input:focus {
+	outline: 2px solid var(--highlight);
+}
+
+input:-webkit-autofill {
+	-webkit-text-fill-color: var(--text-primary) !important;
+}
+
+a {
+	color: var(--highlight);
+}
+
+/* 
+================
+Main
+================
+*/
+
+.main {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* 
+================
+Auth
+================
+*/
+
+.field {
+	width: 350px;
+	height: auto;
+	border-radius: var(--radius-2);
+	background-color: var(--primary);
+	padding: 1.5rem;
+	box-shadow: 0px 2px 5px rgba(152, 152, 152, 0.344);
+	border: 1px solid var(--text-primary);
+}
+
+.form {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: space-between;
+	text-align: center;
+}
+
+.auth-title {
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+.btn {
+	background-color: var(--highlight);
+	border: none;
+	padding: 0.675rem 0;
+	border-radius: var(--radius-2);
+	font-size: 1rem;
+}
+
+.error {
+	color: var(--delete);
+}
+
+.success {
+	color: var(--paid-text);
 }

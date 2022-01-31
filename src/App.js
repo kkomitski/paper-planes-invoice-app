@@ -16,10 +16,8 @@ import {
 	onSnapshot,
 } from 'firebase/firestore';
 
-// Styling/Bootstrap
+// Styling
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
 
 // Components
 import SignUp from './components/SignUp';
@@ -80,8 +78,25 @@ function App() {
 	}
 
 	return (
-		<>
-			<Container
+		<main className='main'>
+			<section className='section-center'>
+				<Router>
+					<AuthProvider>
+						<Routes>
+							<Route exact path='/' element={<PrivateRoute />}>
+								<Route path='/' element={<Dashboard />} />
+							</Route>
+							<Route exact path='/' element={<PrivateRoute />}>
+								<Route path='/update-profile' element={<UpdateProfile />} />
+							</Route>
+							<Route exact path='/signup' element={<SignUp />} />
+							<Route exact path='/login' element={<Login />} />
+							<Route exact path='/forgot-password' element={<ForgotPassword />} />
+						</Routes>
+					</AuthProvider>
+				</Router>
+			</section>
+			{/* <Container
 				className='d-flex align-items-center justify-content-center'
 				style={{ minHeight: '100vh' }}
 			>
@@ -102,8 +117,10 @@ function App() {
 						</AuthProvider>
 					</Router>
 				</div>
-			</Container>
-			<div className='App'>
+			</Container> */}
+
+			{/* <------- CRUD -------->  */}
+			{/* <div className='App'>
 				<input
 					type='text'
 					placeholder='name'
@@ -141,8 +158,8 @@ function App() {
 						</div>
 					);
 				})}
-			</div>
-		</>
+			</div> */}
+		</main>
 	);
 }
 

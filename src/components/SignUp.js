@@ -36,10 +36,11 @@ export default function SignUp() {
 
 	return (
 		<>
-			<fieldset>
-				<form onSubmit={handleSubmit}>
-					<legend>Sign Up</legend>
-					{error}
+			<fieldset className='field'>
+				<form className='form' onSubmit={handleSubmit}>
+					<legend className='auth-title'>Sign Up</legend>
+					<br />
+					<div className='error'>{error}</div>
 					{/* {JSON.stringify(currentUser)} */}
 					<br />
 					<label htmlFor='email'>email</label> <br />
@@ -48,11 +49,14 @@ export default function SignUp() {
 					<input type='password' id='password' ref={passwordRef} /> <br />
 					<label htmlFor='email'>confirm password</label> <br />
 					<input type='password' id='password-confirm' ref={passwordConfirmRef} /> <br />
-					<button disabled={loading}>Sign Up</button>
+					<button className='btn' disabled={loading}>
+						Sign Up
+					</button>
+					<br />
+					<div className='w-100 text-center mt-2'>
+						Already have an account? <Link to='../login'>Log In</Link>
+					</div>
 				</form>
-				<div className='w-100 text-center mt-2'>
-					Already have an account? <Link to='../login'>Log In</Link>
-				</div>
 			</fieldset>
 		</>
 	);

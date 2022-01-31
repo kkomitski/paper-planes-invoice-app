@@ -31,25 +31,28 @@ export function ForgotPassword() {
 
 	return (
 		<>
-			<fieldset>
-				<form onSubmit={handleSubmit}>
-					<legend>Reset Password</legend>
-					<div style={{ color: 'red' }}>{error} </div>
+			<fieldset className='field'>
+				<form className='form' onSubmit={handleSubmit}>
+					<legend className='auth-title'>Reset Password</legend>
 					<br />
-					<div style={{ color: 'green' }}>{message}</div>
-					{currentUser ? currentUser.email : 'noone logged'}
+					<div className='error'>{error}</div>
+					<div className='success'>{message}</div>
 					<br />
+					{/* {currentUser ? currentUser.email : 'noone logged'} */}
 					<label htmlFor='email'>email</label> <br />
-					<input type='text' id='email' ref={emailRef} /> <br />
+					<input type='text' id='email' ref={emailRef} />
 					{/* <button disabled={loading}>Log In</button> */}
-					<button>Reset</button>
+					<br />
+					<button className='btn'>Reset</button>
+					<br />
 					<div>
 						<Link to='/login'>Login</Link>
 					</div>
+					<br />
+					<div className=''>
+						Need an account? <Link to='../signup'>Sign Up</Link>
+					</div>
 				</form>
-				<div className='w-100 text-center mt-2'>
-					Need an account? <Link to='../signup'>Sign Up</Link>
-				</div>
 			</fieldset>
 		</>
 	);
