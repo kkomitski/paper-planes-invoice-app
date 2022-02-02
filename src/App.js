@@ -94,7 +94,8 @@ function App() {
 			</section>
 
 			{/* <------- CRUD -------->  */}
-			<div className='App'>
+
+			{/* <div className='App'>
 				<input
 					type='text'
 					placeholder='name'
@@ -132,7 +133,7 @@ function App() {
 						</div>
 					);
 				})}
-			</div>
+			</div> */}
 		</main>
 	);
 }

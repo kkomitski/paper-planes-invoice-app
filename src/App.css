@@ -9,14 +9,19 @@ Variables
 :root {
 	/* Dark theme */
 	--dark-primary: #141625;
+	--dark-secondary: #5a556c;
 	--dark-element: #1f213a;
 	--dark-text-primary: #feffff;
 	--dark-text-secondary: #9496af;
+	--dark-box-shadow: 2px 0px 5px var(--dark-secondary);
+
 	/* Light theme */
 	--light-primary: #f8f7fc;
+	--light-secondary: #cac3e6;
 	--light-element: #ffffff;
 	--light-text-primary: #3a3a3a;
 	--dark-text-secondary: #c8c7cb;
+	--light-box-shadow: 2px 0px 5px var(--light-secondary);
 
 	/* Main */
 	--highlight: #8362fe;
@@ -27,8 +32,10 @@ Variables
 	--paid-bg: #1e2d3a;
 	--pending-text: #e89127;
 	--pending-bg: #30232a;
-	--overdue-text: #df3c3c;
-	--overdure-bg: #392d30;
+	--overdue-text: #ee5555;
+	--overdue-bg: #771b1b8a;
+	--draft-text: #d1d3ea;
+	--draft-bg: #2a2c43;
 	--font: 'Jost', sans-serif;
 
 	/* Elements */
@@ -37,9 +44,11 @@ Variables
 	--radius-1: 0.25rem;
 	--radius-2: 0.5rem;
 	--primary: var(--dark-primary);
+	--secondary: var(--dark-secondary);
 	--element: var(--dark-element);
 	--text-primary: var(--dark-text-primary);
 	--text-secondary: var(--text-secondary);
+	--box-shadow: var(--dark-box-shadow);
 }
 
 *,
@@ -57,9 +66,29 @@ Global Styles
 */
 
 body {
-	background-color: var(--element);
+	background-color: var(--primary);
 	color: var(--text-primary);
 	font-family: var(--font);
+}
+
+main {
+	width: 100%;
+	height: 100%;
+}
+
+.section-center {
+	/* height: 100vh; */
+	/* width: 100vw; */
+	/* min-height: 100; */
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+img {
+	/* max-height: 50px; */
+	height: 100%;
 }
 
 input {
@@ -71,6 +100,36 @@ input {
 	font-family: var(--font);
 	font-size: 1rem;
 	border: 1px solid var(--text-primary);
+}
+
+h1 {
+	font-size: 1.25rem;
+}
+
+h2 {
+	font-size: 0.875rem;
+	font-weight: 300;
+}
+
+h4 {
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+@media screen and (min-width: 568px) {
+	h1 {
+		font-size: 1.25rem;
+	}
+
+	h2 {
+		font-size: 1rem;
+		font-weight: 300;
+	}
+
+	h4 {
+		font-size: 1rem;
+		font-weight: 400;
+	}
 }
 
 input:-webkit-autofill,
@@ -92,20 +151,6 @@ input:-webkit-autofill {
 
 a {
 	color: var(--highlight);
-}
-
-/* 
-================
-Main
-================
-*/
-
-.main {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 /* 
@@ -153,4 +198,275 @@ Auth
 
 .success {
 	color: var(--paid-text);
+}
+
+/* 
+================
+Dashboard
+================
+*/
+
+.dashboard {
+	background: var(--primary);
+	width: 100%;
+	height: 100%;
+}
+
+.header {
+	background: var(--element);
+	width: 100%;
+	height: 75px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: var(--box-shadow);
+	position: sticky;
+}
+
+.profile-mode-container {
+	height: 75px;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.mode-container {
+	display: flex;
+	align-items: center;
+}
+
+.mode-icon {
+	height: 20px;
+	/* padding: 1.25rem; */
+	filter: invert(59%) sepia(34%) saturate(281%) hue-rotate(202deg) brightness(82%) contrast(88%);
+}
+
+.profile-photo-container {
+	height: 100%;
+	border-radius: 50%;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.profile-photo {
+	filter: invert(59%) sepia(34%) saturate(281%) hue-rotate(202deg) brightness(82%) contrast(88%);
+	padding: 0.5rem;
+}
+
+.icon-container {
+	background: var(--highlight);
+	height: 100%;
+	width: 75px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+.logo {
+	height: 100%;
+	padding: 1.25rem;
+	filter: invert(100%) sepia(0%) saturate(7482%) hue-rotate(75deg) brightness(99%) contrast(106%);
+}
+
+@media screen and (min-width: 865px) {
+	.header {
+		width: 75px;
+		height: 100vh;
+		flex-direction: column;
+		border-top-right-radius: 20px;
+		/* float: left; */
+		position: fixed;
+	}
+
+	.profile-mode-container {
+		flex-direction: column;
+		width: 75px;
+		height: auto;
+	}
+
+	.profile-photo-container {
+		width: 100%;
+	}
+
+	.icon-container {
+		width: 100%;
+		height: 75px;
+	}
+
+	:root {
+		--light-box-shadow: 0px 2px 5px var(--light-secondary);
+		--dark-box-shadow: 0px 2px 5px var(--dark-secondary);
+	}
+}
+
+/* 
+================
+Invoices
+================
+*/
+
+.invoices-section {
+	margin: auto 1rem;
+}
+
+.title-container {
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.invoice-container {
+	background: var(--element);
+	border-radius: var(--radius-2);
+	padding: 1.75rem;
+	margin-bottom: 1.25rem;
+}
+
+.name-and-id {
+	display: flex;
+	justify-content: space-between;
+}
+
+.id {
+	text-transform: uppercase;
+}
+
+.due-and-status {
+	margin-top: 2rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+.status-container {
+	display: flex;
+	align-items: center;
+	/* background: var(--paid-bg); */
+	padding-right: 0.65rem;
+	/* padding-left: 0.25rem; */
+	width: 150px;
+	justify-content: center;
+	max-height: 55px;
+	border-radius: var(--radius-2);
+}
+
+.dot {
+	/* color: var(--paid-text); */
+	font-size: 5rem;
+	line-height: 24px;
+	display: flex;
+	transform: translateY(6px);
+	margin-right: 7px;
+}
+
+.status {
+	/* color: var(--paid-text); */
+}
+
+.total {
+	font-weight: 400;
+}
+
+.id {
+	font-weight: 500;
+}
+
+@media screen and (max-width: 568px) {
+	.status-container {
+		padding-right: 2.25rem;
+		padding-left: 1.75rem;
+	}
+}
+
+@media screen and (min-width: 865px) {
+	section {
+		/* margin-left:75px; */
+	}
+
+	.invoices-section-container {
+		margin-left: 75px;
+	}
+
+	.invoices-section {
+		max-width: 850px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	.invoice-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 2rem;
+		padding: 1rem 2rem;
+	}
+
+	.due-and-status {
+		flex-direction: row;
+		margin: 0;
+		gap: 1.5rem;
+	}
+
+	.due-and-total {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		gap: 1.5rem;
+	}
+
+	.name-and-id {
+		gap: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.status-container {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+	}
+
+	.title-container {
+		padding: 1rem 0;
+	}
+}
+
+@media screen and (min-width: 1176px) {
+	.invoice-title {
+		font-size: 3rem;
+		padding: 3rem 0;
+	}
+}
+
+/* 
+================
+Status
+================
+*/
+
+.paid {
+	color: var(--paid-text);
+	background: var(--paid-bg);
+}
+
+.pending {
+	color: var(--pending-text);
+	background: var(--pending-bg);
+}
+
+.overdue {
+	color: var(--overdue-text);
+	background: var(--overdue-bg);
+}
+
+.draft {
+	color: var(--draft-text);
+	background: var(--draft-bg);
 }

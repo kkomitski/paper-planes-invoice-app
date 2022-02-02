@@ -1,14 +1,41 @@
+import React, { useEffect, useState } from 'react';
+
+// Auth
 import { updateCurrentUser } from 'firebase/auth';
-import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, addDoc, setDoc } from 'firebase/firestore';
+
+// Router
+import { useNavigate } from 'react-router-dom';
+
+// Database
+import {
+	collection,
+	addDoc,
+	onSnapshot,
+	updateDoc,
+	doc,
+	serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../firebase-config';
+
+// Styles
+import '../App.css';
+
+// Components
+import { Header } from './Header';
+import SingleInvoice from './SingleInvoice';
+import Invoices from './Invoices';
+// import { getStatus, getDate } from './SingleInvoice';
 
 export function Dashboard() {
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [invoices, setInvoices] = useState([]);
+
 	const { currentUser, logout } = useAuth();
 	const navigate = useNavigate();
+
+	const invoicesRef = collection(db, 'users', currentUser.email, 'Invoices');
 
 	async function handleLogout() {
 		setError('');
@@ -22,22 +49,67 @@ export function Dashboard() {
 		}
 	}
 
-	const invoiceJim = {
-		client: 'jim',
-		price: 234,
+	const randomInvoice = {
+		client: 'George Peters',
+		price: 534.23,
+		createdAt: serverTimestamp(),
+		status: 'Pending',
 	};
 
-	const addInvoice = async (invoice) => {
+	const addInvoice = async () => {
 		await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
-			invoice,
+			client: 'George Peters',
+			price: 534.23,
+			createdAt: serverTimestamp(),
+			status: 'Pending',
 		});
 	};
 
-	addInvoice(invoiceJim);
+	const getInvoices = () => {
+		setLoading(true);
+		onSnapshot(invoicesRef, (snapshot) => {
+			const ref = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+			// If not paid and overdue, change status to Overdue
+			ref.map((ref) => {
+				const overdueDate = new Date(ref.createdAt.toDate());
+				overdueDate.setDate(overdueDate.getDate() + 30);
+				const currentDate = Date.now();
+
+				if (ref.status !== 'Paid') {
+					if (currentDate > overdueDate) {
+						const docRef = doc(db, 'users', currentUser.email, 'Invoices', ref.id);
+						updateDoc(docRef, {
+							status: 'Overdue',
+						});
+					}
+				}
+			});
+			setInvoices(ref);
+			setLoading(false);
+		});
+	};
+
+	useEffect(() => getInvoices(), []);
+	// addInvoice(invoiceJim);
 
 	return (
-		<>
-			<h2>Profile</h2>
+		<main className='dashboard'>
+			<Header />
+			<Invoices>
+				{invoices.map((invoice) => {
+					// console.log(invoice);
+					return <SingleInvoice key={invoice.id} {...invoice} />;
+				})}
+			</Invoices>
+			<button
+				style={{ transform: 'translateX(500px)' }}
+				className='btn'
+				onClick={() => addInvoice(randomInvoice)}
+			>
+				add
+			</button>
+			{/* <h2>Profile</h2>
 			{error}
 			<strong>email: </strong>
 			{currentUser.email} <br />
@@ -49,10 +121,10 @@ export function Dashboard() {
 				<Link to='/update-profile'>update profile</Link>
 			</button>
 			<br />
-			<br />
-			<button type='link' onClick={handleLogout}>
+			<br /> */}
+			<button type='link' style={{ position: 'absolute' }} className='btn' onClick={handleLogout}>
 				Log Out
 			</button>
-		</>
+		</main>
 	);
 }
