@@ -25,6 +25,7 @@ import '../App.css';
 import { Header } from './Header';
 import SingleInvoice from './SingleInvoice';
 import Invoices from './Invoices';
+import Overlay from './Overlay';
 // import { getStatus, getDate } from './SingleInvoice';
 
 export function Dashboard() {
@@ -48,6 +49,23 @@ export function Dashboard() {
 			setError('Failed to log out');
 		}
 	}
+
+	const [barState, setBarState] = useState('close-bar');
+	const [profileState, setProfileState] = useState('reveal');
+
+	// const plusBtn = useRef();
+	// const profModeRef = useRef();
+
+	const handleClickNew = () => {
+		console.log('click');
+		if (barState === 'close-bar') {
+			setBarState('open-bar');
+			setProfileState('hide');
+		} else {
+			setBarState('close-bar');
+			setProfileState('reveal');
+		}
+	};
 
 	const randomInvoice = {
 		client: 'George Peters',
@@ -76,12 +94,14 @@ export function Dashboard() {
 				overdueDate.setDate(overdueDate.getDate() + 30);
 				const currentDate = Date.now();
 
-				if (ref.status !== 'Paid') {
-					if (currentDate > overdueDate) {
-						const docRef = doc(db, 'users', currentUser.email, 'Invoices', ref.id);
-						updateDoc(docRef, {
-							status: 'Overdue',
-						});
+				if (ref.status !== 'Draft') {
+					if (ref.status !== 'Paid') {
+						if (currentDate > overdueDate) {
+							const docRef = doc(db, 'users', currentUser.email, 'Invoices', ref.id);
+							updateDoc(docRef, {
+								status: 'Overdue',
+							});
+						}
 					}
 				}
 			});
@@ -95,20 +115,23 @@ export function Dashboard() {
 
 	return (
 		<main className='dashboard'>
+			{/* <Header handleClickNew={handleClickNew()} barState={barState} profileState={profileState} /> */}
 			<Header />
+			<Overlay />
 			<Invoices>
 				{invoices.map((invoice) => {
 					// console.log(invoice);
 					return <SingleInvoice key={invoice.id} {...invoice} />;
 				})}
 			</Invoices>
-			<button
+
+			{/* <button
 				style={{ transform: 'translateX(500px)' }}
 				className='btn'
 				onClick={() => addInvoice(randomInvoice)}
 			>
 				add
-			</button>
+			</button> */}
 			{/* <h2>Profile</h2>
 			{error}
 			<strong>email: </strong>

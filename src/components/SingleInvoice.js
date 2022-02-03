@@ -59,6 +59,7 @@ export default function SingleInvoice({ id, client, price, createdAt, status }) 
 					<h4 className='status'>{status}</h4>
 				</div>
 			</div>
+			{/* <h1>></h1> */}
 		</div>
 	);
 }
