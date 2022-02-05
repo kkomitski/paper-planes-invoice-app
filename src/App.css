@@ -37,7 +37,7 @@ Variables
 	--light-overdue-text: #da6d6d;
 	--light-overdue-bg: #fbeeee;
 	--light-draft-text: #9772e1;
-	--light-draft-bg: rgba(242, 237, 255, 0.875);
+	--light-draft-bg: rgba(242, 237, 255, 0.95);
 
 	/* Main */
 	--highlight: #8362fe;
@@ -125,7 +125,7 @@ input {
 	padding: 0.75rem;
 	border-radius: var(--radius-2);
 	border: none;
-	background-color: var(--element) !important;
+	background-color: var(--element);
 	color: var(--text-primary);
 	font-family: var(--font);
 	font-size: 1rem;
@@ -572,17 +572,20 @@ a {
 
 .overlay-container {
 	position: fixed;
+	/* float: left; */
 	z-index: 3;
 	width: 75px;
 	transform: translateY(-75px);
 	transition: var(--transition);
 	width: 100vw;
+	min-height: 100vh;
 	max-width: 750px;
 	/* transform: translateX(-500px); */
 }
 
 .overlay {
-	height: 100vh;
+	height: auto;
+	min-height: 100vh;
 	background: var(--draft-bg);
 	/* opacity: 0.75; */
 	z-index: 3;
@@ -627,7 +630,7 @@ a {
 .input-title {
 	color: var(--highlight);
 	font-size: 1.25rem;
-	margin-top: 2rem;
+	margin-top: 0.75rem;
 }
 
 .invoice-from {
@@ -642,6 +645,9 @@ a {
 .new-invoice-input {
 	width: 100%;
 	margin-top: 5px;
+	padding: 0.4rem;
+	font-size: 0.875rem;
+	border-radius: var(--radius-1);
 }
 
 .company {
@@ -707,4 +713,84 @@ a {
 
 .email {
 	grid-column: auto / span 3;
+}
+
+.client-city {
+	grid-column: auto / span 3;
+}
+
+.client-street {
+	grid-column: auto / span 3;
+}
+
+.client-postcode {
+	grid-column: auto / span 3;
+}
+
+.client-country {
+	grid-column: auto / span 3;
+}
+
+.invoice-date {
+	grid-column: 1 / span 3;
+}
+
+.payment-expected {
+	grid-column: auto / span 3;
+}
+
+.job-description {
+	grid-column: auto / span 6;
+}
+
+.items {
+	grid-column: auto / span 6;
+}
+
+.items-list {
+	grid-column: auto / span 6;
+}
+
+.item {
+	grid-column: auto / span 6;
+	gap: 0.75rem;
+	display: grid;
+	grid-template-columns: auto 10% 40px 80px;
+	margin-top: 0.75rem;
+}
+
+.total-input {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* background-color: var(--primary); */
+}
+
+.total-input-field {
+	background-color: transparent;
+	border: none;
+}
+
+.trash {
+	max-height: 100%;
+	max-width: 100%;
+	height: 15px;
+	margin-left: 0.75rem;
+	filter: invert(59%) sepia(34%) saturate(281%) hue-rotate(202deg) brightness(82%) contrast(88%);
+}
+
+@media screen and (min-width: 568px) {
+	.item {
+		grid-template-columns: auto 10% 80px 120px;
+	}
+}
+
+.add-new-item {
+	background-color: var(--element);
+	width: 100%;
+	grid-column: auto / span 6;
+	text-align: center;
+	padding: 0.875rem;
+	color: var(--text-secondary);
+	border-radius: 25px;
 }
