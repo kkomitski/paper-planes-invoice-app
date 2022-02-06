@@ -1,7 +1,7 @@
 import React from 'react';
 import trash from '../assets/trash-solid.svg';
 
-export default function ListItem(props) {
+export default function Item(props) {
 	// console.log(props);
 	const { removeItem, id } = props;
 	// console.log(id);
