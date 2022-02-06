@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
+import trash from '../assets/trash-solid.svg';
 import plus from '../assets/plus-circle-solid.svg';
 import '../App.css';
 import ListItem from './ListItem';
 
 export default function Overlay() {
 	const [overlayContainerState, setOverlayContainerState] = useState('closed');
-	const [items, setItems] = useState([<ListItem />]);
+	const [items, setItems] = useState([{ id: 0 }]);
 
 	const plusBtn = useRef();
 	const cancelBtn = useRef();
@@ -17,11 +18,18 @@ export default function Overlay() {
 			setOverlayContainerState('open');
 		} else {
 			setOverlayContainerState('closed');
+			setItems([{ id: 0 }]);
 		}
 	};
 
+	const removeItem = (id) => {
+		setItems((items) => {
+			return items.filter((item) => item.id !== id);
+		});
+	};
+
 	const addNewItem = () => {
-		setItems((items) => [...items, <ListItem />]);
+		setItems((items) => [...items, { id: items.slice(-1)[0] ? items.slice(-1)[0].id + 1 : 0 }]);
 	};
 
 	return (
@@ -103,12 +111,22 @@ export default function Overlay() {
 								+ Add New Item
 							</div>
 							<div className='items-list'>
-								{items.map((item, i) => {
-									return (
-										<div className='item' key={i}>
-											{item}
-										</div>
-									);
+								<div className='item'>
+									<div className='item-attribute name'>
+										<h2>Name</h2>
+									</div>
+									<div className='item-attribute qty'>
+										<h2>Qty</h2>
+									</div>
+									<div className='item-attribute price'>
+										<h2>Price</h2>
+									</div>
+									<div className='item-attribute total'>
+										<h2>Total</h2>
+									</div>
+								</div>
+								{items.map((item) => {
+									return <ListItem key={item.id} id={item.id} removeItem={removeItem} />;
 								})}
 							</div>
 						</div>

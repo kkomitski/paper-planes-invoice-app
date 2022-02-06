@@ -133,12 +133,16 @@ input {
 }
 
 h1 {
-	font-size: 1.25rem;
+	font-size: 1.125rem;
 }
 
 h2 {
 	font-size: 0.875rem;
 	font-weight: 300;
+}
+
+h3 {
+	font-size: 0.875rem;
 }
 
 h4 {
@@ -257,7 +261,7 @@ a {
 .header {
 	background: var(--element);
 	width: 100%;
-	height: 75px;
+	height: 55px;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -270,13 +274,13 @@ a {
 }
 
 .profile-mode-container {
-	height: 75px;
-	width: 124px;
-	padding: 1rem;
+	height: 50px;
+	width: 95px;
+	padding: 0.5rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 2rem;
+	gap: 1rem;
 	transition: var(--transition);
 	/* align-self: flex-end; */
 }
@@ -287,12 +291,13 @@ a {
 }
 
 .mode-icon {
-	height: 20px;
+	height: 15px;
 	filter: invert(59%) sepia(34%) saturate(281%) hue-rotate(202deg) brightness(82%) contrast(88%);
 }
 
 .profile-photo-container {
 	height: 100%;
+	height: 35px;
 	border-radius: 50%;
 	overflow: hidden;
 	display: flex;
@@ -308,8 +313,8 @@ a {
 
 .icon-container {
 	background: var(--highlight);
-	height: 75px;
-	width: calc(100% + 100px);
+	height: 55px;
+	width: calc(100% + 65px);
 	display: flex;
 	flex: 1 0;
 	justify-content: space-between;
@@ -318,12 +323,12 @@ a {
 	border-bottom-right-radius: 20px;
 	transition: var(--transition);
 	z-index: 2;
-	padding: 0 30px;
+	padding: 0 20px;
 }
 
 .logo {
 	height: 100%;
-	width: 40px;
+	width: 30px;
 	filter: invert(100%) sepia(0%) saturate(7482%) hue-rotate(75deg) brightness(99%) contrast(106%);
 }
 
@@ -337,6 +342,37 @@ a {
 	border-radius: 25px;
 }
 
+@media screen and (min-width: 568px) {
+	.header {
+		height: 75px;
+	}
+
+	.profile-mode-container {
+		height: 75px;
+		padding: 1rem;
+		width: 124px;
+		gap: 2rem;
+	}
+
+	.profile-photo-container {
+		height: 40px;
+	}
+
+	.mode-icon {
+		height: 20px;
+	}
+
+	.icon-container {
+		height: 75px;
+		width: calc(100% - 100px);
+		padding: 0 30px;
+	}
+
+	.logo {
+		height: 100%;
+		width: 40px;
+	}
+}
 @media screen and (min-width: 865px) {
 	.header {
 		width: 75px;
@@ -425,7 +461,7 @@ a {
 }
 
 .due-and-status {
-	margin-top: 2rem;
+	margin-top: 1rem;
 	display: flex;
 	justify-content: space-between;
 }
@@ -461,11 +497,13 @@ a {
 
 @media screen and (max-width: 568px) {
 	.status-container {
-		/* padding-right: 0; */
-		/* padding-left: 0; */
 		width: 120px;
-		/* padding-right: 1.5rem;
-		padding-left: 1rem; */
+	}
+}
+
+@media screen and (min-width: 568px) {
+	.due-and-status {
+		margin-top: 2rem;
 	}
 }
 
@@ -629,7 +667,7 @@ a {
 
 .input-title {
 	color: var(--highlight);
-	font-size: 1.25rem;
+	font-size: 0.75rem;
 	margin-top: 0.75rem;
 }
 
