@@ -69,7 +69,7 @@ export function Dashboard() {
 
 	const randomInvoice = {
 		client: 'George Peters',
-		price: 534.23,
+		total: 534.23,
 		createdAt: serverTimestamp(),
 		status: 'Pending',
 	};
@@ -77,7 +77,7 @@ export function Dashboard() {
 	const addInvoice = async () => {
 		await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
 			client: 'George Peters',
-			price: 534.23,
+			total: 534.23,
 			createdAt: serverTimestamp(),
 			status: 'Pending',
 		});

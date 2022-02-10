@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../App.css';
 
-export default function SingleInvoice({ id, client, price, createdAt, status }) {
+export default function SingleInvoice({ id, client, total, createdAt, status }) {
 	const [currentStatus, setStatus] = useState('');
 	const [date, setDate] = useState('');
 	// const { id, invoice } = props;
@@ -52,7 +52,8 @@ export default function SingleInvoice({ id, client, price, createdAt, status }) 
 			<div className='due-and-status'>
 				<div className='due-and-total'>
 					<h2 className='due'>Due {date}</h2>
-					<h1 className='total'>£ {price}</h1>
+					{/* <h1 className='total'>£ {total}</h1> */}
+					<h1 className='total'>£ {parseFloat(total).toFixed(2)}</h1>
 				</div>
 				<div className={`status-container ${currentStatus}`}>
 					<div className='dot'>•</div>
