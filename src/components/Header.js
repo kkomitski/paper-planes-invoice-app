@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Mode } from './Modes';
-import Overlay from './Overlay';
+import Overlay from './Overlay/Overlay';
 
 import '../App.css';
 import defaultPhoto from '../assets/user-solid.svg';
 // import logo from '../assets/chart-pie-solid.svg';
-import plus from '../assets/plus-circle-solid.svg';
+// import plus from '../assets/plus-circle-solid.svg';
 
 export function Header() {
 	const [profilePhoto, setProfilePhoto] = useState(defaultPhoto);

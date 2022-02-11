@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import trash from '../assets/trash-solid.svg';
+import trash from '../../assets/trash-solid.svg';
 
 export default function Item(props) {
 	const { removeItem, id, name, price, quantity } = props;
@@ -18,7 +18,7 @@ export default function Item(props) {
 				const totali = itemPrice.current.value * itemQuantity.current.value;
 				// setCurrentItemPrice(itemPrice.current.value);
 				// setCurrentItemQuantity(itemQuantity.current.value);
-				setTotal(totali);
+				setTotal(parseFloat(totali).toFixed(2));
 			} else if (!itemPrice.current.value || !itemQuantity.current.value) {
 				setTotal('');
 			}

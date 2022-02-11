@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import plus from '../assets/plus-circle-solid.svg';
-import '../App.css';
+import plus from '../../assets/plus-circle-solid.svg';
+import '../../App.css';
 import Item from './Item';
 import { addDoc, collection, serverTimestamp, doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase-config';
-import { useAuth } from '../context/AuthContext';
+import { db } from '../../firebase-config';
+import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
 
 export default function Overlay() {
@@ -16,18 +16,19 @@ export default function Overlay() {
 	const [date, setDate] = useState(new Date());
 	const [items, setItems] = useState([{ id: 0, name: '', quantity: '', price: '' }]);
 
-	const [formData, setFormData] = useState({
+	const blankForm = {
 		client: '',
-		'client-email': '',
-		'client-street': '',
-		'client-city': '',
-		'client-postcode': '',
-		'client-country': '',
+		// 'client-email': '',
+		// 'client-street': '',
+		// 'client-city': '',
+		// 'client-postcode': '',
+		// 'client-country': '',
 		createdAt: serverTimestamp(),
 		status: 'Pending',
 		items: [],
 		total: 0,
-	});
+	};
+	const [formData, setFormData] = useState(blankForm);
 
 	const plusBtn = useRef();
 	const cancelBtn = useRef();
@@ -59,7 +60,7 @@ export default function Overlay() {
 	const paymentExpected = useRef();
 	const jobDescription = useRef();
 
-	const handleClick = () => {
+	const toggleOverlay = () => {
 		if (overlayContainerState === 'closed') {
 			setOverlayContainerState('open');
 			setItems([{ id: 0, name: '', quantity: '', price: '' }]);
@@ -69,27 +70,52 @@ export default function Overlay() {
 			setTimeout(() => setField('info'), 500);
 			clientClient.current.setAttribute('placeholder', '');
 			setAddState('add');
+			setFormData(blankForm);
 			clearAllInputs();
 		}
 	};
 
-	const changeField = () => {
-		field === 'info' ? setField('items') : setField('info');
-		setAddState('add');
+	const toggleInputField = () => {
+		if (field === 'info') {
+			setField('items');
+		} else {
+			let sumTotal = 0;
+			const currentItems = getItems();
+			currentItems.forEach((item) => {
+				if (item.total) {
+					sumTotal += parseFloat(item.total);
+				}
+			});
+			setFormData({ ...formData, items: [...currentItems], total: sumTotal });
+			setField('info');
+			setAddState('add');
+		}
+	};
+
+	const toggleCalendar = () => {
+		calendar === ''
+			? setCalender(<Calendar onChange={setDate} onClickDay={(e) => calenderOff(e)} />)
+			: setCalender('');
+	};
+
+	const calenderOff = (clickedDate) => {
+		setCalender('');
+		setDate(clickedDate);
+		setFormData({ ...formData, createdAt: clickedDate });
+	};
+
+	const addItem = () => {
+		setItems((items) => [
+			...items,
+			{ id: items.slice(-1)[0] ? items.slice(-1)[0].id + 1 : 0, name: '', quantity: '', price: '' },
+		]);
+		// getItems();
 	};
 
 	const removeItem = (id) => {
 		setItems((items) => {
 			return items.filter((item) => item.id !== id);
 		});
-	};
-
-	const addNewItem = () => {
-		setItems((items) => [
-			...items,
-			{ id: items.slice(-1)[0] ? items.slice(-1)[0].id + 1 : 0, name: '', quantity: '', price: '' },
-		]);
-		// getItems();
 	};
 
 	const getItems = () => {
@@ -112,40 +138,7 @@ export default function Overlay() {
 		return items;
 	};
 
-	const addNewInvoice = async () => {
-		let sumTotal = 0;
-		const currentItems = getItems();
-		currentItems.forEach((item) => {
-			if (item.total) {
-				sumTotal += Number(item.total);
-			}
-		});
-
-		if (clientClient.current.value && sumTotal) {
-			setFormData({ ...formData, items: [...currentItems], total: sumTotal });
-			await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
-				...formData,
-			});
-
-			// Reset
-			setOverlayContainerState('closed');
-			setItems([{ id: 0 }]);
-			setTimeout(() => setField('info'), 500);
-			setItems([]);
-			clientClient.current.setAttribute('placeholder', '');
-			setAddState('add');
-			clearAllInputs();
-		} else if (clientClient.current.value && !sumTotal) {
-			setAddState('add-error');
-		} else if (!clientClient.current.value && sumTotal) {
-			clientClient.current.setAttribute('placeholder', 'Please add client');
-		} else {
-			clientClient.current.setAttribute('placeholder', 'Please add client');
-			setAddState('add-error');
-		}
-	};
-
-	const addInfo = (e) => {
+	const addInfoToForm = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
@@ -161,28 +154,39 @@ export default function Overlay() {
 		});
 	};
 
-	const calenderOff = (clickedDate) => {
-		setCalender('');
-		setDate(clickedDate);
-		setFormData({ ...formData, createdAt: clickedDate });
-	};
-
-	const toggleCalendar = () => {
-		calendar === ''
-			? setCalender(<Calendar onChange={setDate} onClickDay={(e) => calenderOff(e)} />)
-			: setCalender('');
+	const saveInvoice = async () => {
+		if (formData.client && formData.total) {
+			await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
+				...formData,
+			});
+			// Reset
+			setOverlayContainerState('closed');
+			setItems([{ id: 0 }]);
+			setTimeout(() => setField('info'), 500);
+			setItems([]);
+			clientClient.current.setAttribute('placeholder', '');
+			setAddState('add');
+			setFormData(blankForm);
+			clearAllInputs();
+		} else if (formData.client && !formData.total) {
+			setAddState('add-error');
+		} else if (!formData.client && formData.total) {
+			clientClient.current.setAttribute('placeholder', 'Please add client');
+		} else {
+			clientClient.current.setAttribute('placeholder', 'Please add client');
+			setAddState('add-error');
+		}
 	};
 
 	return (
 		<section className={`overlay-container ${overlayContainerState}`}>
-			<article ref={plusBtn} onClick={handleClick} className={`icon-container`}>
-				<button ref={cancelBtn} onClick={handleClick} className='btn cancel-btn'>
+			<article ref={plusBtn} onClick={toggleOverlay} className={`icon-container`}>
+				<button ref={cancelBtn} onClick={toggleOverlay} className='btn cancel-btn'>
 					Cancel
 				</button>
 				<img className='logo' src={plus} alt='' />
 			</article>
 			<article ref={overlay} className={`overlay`}>
-				{/* <h1 className='overlay-title'>New Invoice</h1> */}
 				<div className={`overlay-fields ${field}`}>
 					{/* ITEMS */}
 					<fieldset style={{ outline: 'none', border: 'none' }} className='new-invoice'>
@@ -216,10 +220,10 @@ export default function Overlay() {
 									);
 								})}
 							</div>
-							<div onClick={() => addNewItem()} className='add-items'>
+							<div onClick={() => addItem()} className='add-items'>
 								+ Add New Item
 							</div>
-							<div onClick={() => changeField()} className='add-items'>
+							<div onClick={() => toggleInputField()} className='add-items'>
 								Back
 							</div>
 						</form>
@@ -257,7 +261,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Client</h2>
 								<input
 									ref={clientClient}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client'
 									type='text'
 									className='new-invoice-input'
@@ -267,7 +271,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Email</h2>
 								<input
 									ref={clientEmail}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client-email'
 									type='email'
 									className='new-invoice-input'
@@ -277,7 +281,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Street</h2>
 								<input
 									ref={clientStreet}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client-street'
 									type='text'
 									className='new-invoice-input'
@@ -287,7 +291,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>City</h2>
 								<input
 									ref={clientCity}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client-city'
 									type='text'
 									className='new-invoice-input'
@@ -297,7 +301,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Postcode</h2>
 								<input
 									ref={clientPostcode}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client-postcode'
 									type='text'
 									className='new-invoice-input'
@@ -307,7 +311,7 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Country</h2>
 								<input
 									ref={clientCountry}
-									onChange={addInfo}
+									onChange={(e) => addInfoToForm(e)}
 									name='client-country'
 									type='text'
 									className='new-invoice-input'
@@ -320,8 +324,8 @@ export default function Overlay() {
 									type='text'
 									onClick={toggleCalendar}
 									// ref={invoiceDate}
-									onChange={addInfo}
-									name='createdAt'
+									// onChange={(e) => addInfoToForm(e)}
+									// name='createdAt'
 									style={{ border: 'none' }}
 									// disabled={true}
 									value={date.toLocaleString('en-GB', {
@@ -341,10 +345,10 @@ export default function Overlay() {
 								<h2 className='item-attribute'>Job Description</h2>
 								<input ref={jobDescription} type='text' className='new-invoice-input' />
 							</div>
-							<div onClick={() => changeField()} className={`add-items ${addState}`}>
+							<div onClick={() => toggleInputField()} className={`add-items ${addState}`}>
 								+ Add Items
 							</div>
-							<div onClick={addNewInvoice} className='add-items save'>
+							<div onClick={saveInvoice} className='add-items save'>
 								Save
 							</div>
 							<div onClick={downloadPdf} className='add-items download-pdf'>

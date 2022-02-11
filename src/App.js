@@ -12,13 +12,13 @@ import { collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from 'fireb
 import './App.css';
 
 // Components
-import SignUp from './components/SignUp';
+import SignUp from './components/Authentication/SignUp';
 import { AuthProvider } from './context/AuthContext';
 import { Dashboard } from './components/Dashboard';
-import { Login } from './components/Login';
-import { PrivateRoute } from './components/PrivateRoute';
-import { ForgotPassword } from './components/ForgotPassword';
-import { UpdateProfile } from './components/UpdateProfile';
+import { Login } from './components/Authentication/Login';
+import { PrivateRoute } from './components/Authentication/PrivateRoute';
+import { ForgotPassword } from './components/Authentication/ForgotPassword';
+import { UpdateProfile } from './components/Authentication/UpdateProfile';
 
 // Auth
 import { useAuth } from './context/AuthContext';

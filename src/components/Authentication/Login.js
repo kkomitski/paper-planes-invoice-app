@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 
 // Components
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 // Styles
-import '../App.css';
+import '../../App.css';
 
 export function Login() {
 	const emailRef = useRef();

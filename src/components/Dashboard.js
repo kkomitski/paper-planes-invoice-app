@@ -25,7 +25,7 @@ import '../App.css';
 import { Header } from './Header';
 import SingleInvoice from './SingleInvoice';
 import Invoices from './Invoices';
-import Overlay from './Overlay';
+import Overlay from './Overlay/Overlay';
 // import { getStatus, getDate } from './SingleInvoice';
 
 export function Dashboard() {

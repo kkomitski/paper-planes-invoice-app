@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import {
 	addDoc,
@@ -13,7 +13,7 @@ import {
 	serverTimestamp,
 	setDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase-config';
+import { db } from '../../firebase-config';
 
 export default function SignUp() {
 	const emailRef = useRef();
