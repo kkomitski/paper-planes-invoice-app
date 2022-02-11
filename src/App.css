@@ -138,6 +138,17 @@ input {
 	border: 1px solid var(--text-primary);
 }
 
+textarea {
+	padding: 0.75rem;
+	border-radius: var(--radius-2);
+	border: none;
+	background-color: var(--element);
+	color: var(--text-primary);
+	font-family: var(--font);
+	font-size: 1rem;
+	border: 1px solid var(--text-primary);
+}
+
 h1 {
 	font-size: 1.125rem;
 }
@@ -840,11 +851,11 @@ a {
 	}
 
 	.company {
-		grid-column: auto / span 3;
+		grid-column: 1 / span 3;
 	}
 
 	.street {
-		grid-column: auto / span 3;
+		grid-column: 4 / span 3;
 	}
 
 	.city {
@@ -879,7 +890,7 @@ a {
 @media screen and (min-width: 865px) {
 	.invoice-from {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		grid-template-rows: auto;
 		gap: 1.5rem;
 		margin-top: 1rem;
@@ -927,7 +938,9 @@ a {
 }
 
 .payment-expected {
-	grid-column: auto / span 3;
+	grid-column: 4 / span 3;
+	/* width: 100%; */
+	/* max-width: 100%; */
 }
 
 .job-description {
@@ -971,6 +984,8 @@ a {
 	background-color: transparent;
 	border: none;
 	margin: 0;
+	padding-right: 0;
+	text-align: end;
 }
 
 .trash {
@@ -1340,4 +1355,27 @@ button {
 	.react-calendar--selectRange .react-calendar__tile--hover {
 		background-color: var(--highlight);
 	}
+}
+
+.dropdown {
+	background-color: var(--element);
+	border: 1px solid var(--text-primary);
+	border-radius: var(--radius-1);
+	/* padding: 0.5rem; */
+	width: 120px;
+	text-align: start;
+	/* max-width: 100%; */
+	position: absolute;
+	overflow: hidden;
+}
+
+.dropdown-open {
+	height: auto;
+	padding: 0.5rem;
+}
+
+.dropdown-closed {
+	height: 0;
+	padding: 0;
+	border: none;
 }

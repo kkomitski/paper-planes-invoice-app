@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
-// import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
-export function UpdateProfile() {
+export function UpdateProfile({ toggleProfilePage }) {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const passwordConfirmRef = useRef();
 
-	const { currentUser, updateUserPassword, updateUserEmail } = useAuth();
+	const { currentUser, updateUserPassword, updateUserEmail, logout } = useAuth();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -44,8 +43,10 @@ export function UpdateProfile() {
 	}
 
 	return (
-		<>
-			<fieldset>
+		<main className='dashboard'>
+			{/* <Header /> */}
+			{/* <Overlay /> */}
+			<fieldset className='field-container'>
 				<form onSubmit={handleSubmit}>
 					<legend>Update Profile</legend>
 					{error}
@@ -78,10 +79,13 @@ export function UpdateProfile() {
 					<br />
 					<button disabled={loading}>Update</button>
 				</form>
-				<div className='w-100 text-center mt-2'>
-					<Link to='/'>Cancel</Link>
-				</div>
+				<button type='link' style={{ position: 'absolute' }} className='btn' onClick={handleLogout}>
+					Log Out
+				</button>
+				{/* <div onClick={() => toggleProfilePage('invoices')} className='w-100 text-center mt-2'>
+					Cancel
+				</div> */}
 			</fieldset>
-		</>
+		</main>
 	);
 }

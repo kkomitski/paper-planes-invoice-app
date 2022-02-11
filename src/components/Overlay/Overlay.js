@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import plus from '../../assets/plus-circle-solid.svg';
 import '../../App.css';
 import Item from './Item';
-import { addDoc, collection, serverTimestamp, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase-config';
 import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
@@ -11,6 +11,7 @@ export default function Overlay() {
 	const [overlayContainerState, setOverlayContainerState] = useState('closed');
 	const [field, setField] = useState('info');
 	const [addState, setAddState] = useState('add');
+	const [dropdown, setDropdown] = useState('dropdown-closed');
 
 	const [calendar, setCalender] = useState('');
 	const [date, setDate] = useState(new Date());
@@ -18,15 +19,11 @@ export default function Overlay() {
 
 	const blankForm = {
 		client: '',
-		// 'client-email': '',
-		// 'client-street': '',
-		// 'client-city': '',
-		// 'client-postcode': '',
-		// 'client-country': '',
 		createdAt: serverTimestamp(),
 		status: 'Pending',
 		items: [],
 		total: 0,
+		due: 30,
 	};
 	const [formData, setFormData] = useState(blankForm);
 
@@ -35,14 +32,6 @@ export default function Overlay() {
 	const overlay = useRef();
 
 	const { currentUser } = useAuth();
-
-	// const currentDate = new Date().toLocaleString('en-GB', {
-	// 	month: 'long',
-	// 	day: 'numeric',
-	// 	year: 'numeric',
-	// });
-
-	// const [invoiceDate, setInvoiceDate] = useState(currentDate);
 
 	// User Input fields
 	const senderCompany = useRef();
@@ -56,7 +45,7 @@ export default function Overlay() {
 	const clientCity = useRef();
 	const clientPostcode = useRef();
 	const clientCountry = useRef();
-	// const invoiceDate = useRef();
+	const invoiceDate = useRef();
 	const paymentExpected = useRef();
 	const jobDescription = useRef();
 
@@ -64,6 +53,12 @@ export default function Overlay() {
 		if (overlayContainerState === 'closed') {
 			setOverlayContainerState('open');
 			setItems([{ id: 0, name: '', quantity: '', price: '' }]);
+			paymentExpected.current.value = 'Within 30 days';
+			invoiceDate.current.value = date.toLocaleString('en-GB', {
+				month: 'long',
+				day: 'numeric',
+				year: 'numeric',
+			});
 		} else {
 			setOverlayContainerState('closed');
 			setItems([]);
@@ -71,6 +66,8 @@ export default function Overlay() {
 			clientClient.current.setAttribute('placeholder', '');
 			setAddState('add');
 			setFormData(blankForm);
+			setDropdown('dropdown-closed');
+			setDate(new Date());
 			clearAllInputs();
 		}
 	};
@@ -98,9 +95,29 @@ export default function Overlay() {
 			: setCalender('');
 	};
 
+	const toggleDropdown = () => {
+		dropdown === 'dropdown-closed' ? setDropdown('dropdown-open') : setDropdown('dropdown-closed');
+	};
+
+	const dropdownValueChecker = (e) => {
+		// console.log();
+		paymentExpected.current.value = e.target.innerHTML;
+		setFormData({ ...formData, due: parseInt(e.target.innerText.replace(/[^0-9\.]/g, ''), 10) });
+		setDropdown('dropdown-closed');
+	};
+
+	const dropdownValueCustom = (e) => {
+		setFormData({ ...formData, due: parseInt(e.target.value) });
+		setDropdown('dropdown-closed');
+	};
+
 	const calenderOff = (clickedDate) => {
 		setCalender('');
-		setDate(clickedDate);
+		invoiceDate.current.value = clickedDate.toLocaleString('en-GB', {
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric',
+		});
 		setFormData({ ...formData, createdAt: clickedDate });
 	};
 
@@ -323,23 +340,44 @@ export default function Overlay() {
 								<input
 									type='text'
 									onClick={toggleCalendar}
-									// ref={invoiceDate}
-									// onChange={(e) => addInfoToForm(e)}
+									ref={invoiceDate}
+									onChange={(e) => addInfoToForm(e)}
 									// name='createdAt'
 									style={{ border: 'none' }}
 									// disabled={true}
-									value={date.toLocaleString('en-GB', {
-										month: 'long',
-										day: 'numeric',
-										year: 'numeric',
-									})}
+									// defaultValue={date.toLocaleString('en-GB', {
+									// 	month: 'long',
+									// 	day: 'numeric',
+									// 	year: 'numeric',
+									// })}
 									className='new-invoice-input'
 								/>
 								{calendar}
 							</div>
 							<div className='payment-expected'>
 								<h2 className='item-attribute'>Payment Expected</h2>
-								<input ref={paymentExpected} type='text' className='new-invoice-input' />
+								<input
+									// value={`Within 30 days`}
+									onClick={() => toggleDropdown()}
+									onChange={(e) => dropdownValueCustom(e)}
+									ref={paymentExpected}
+									type='text'
+									className='new-invoice-input'
+								/>
+								<div className={`dropdown ${dropdown}`}>
+									<h2 onClick={(e) => dropdownValueChecker(e)} className='item-attribute'>
+										Within 7 days
+									</h2>
+									<h2 onClick={(e) => dropdownValueChecker(e)} className='item-attribute'>
+										Within 14 days
+									</h2>
+									<h2 onClick={(e) => dropdownValueChecker(e)} className='item-attribute'>
+										Within 30 days
+									</h2>
+									<h2 onClick={(e) => dropdownValueChecker(e)} className='item-attribute'>
+										Within 45 days
+									</h2>
+								</div>
 							</div>
 							<div className='job-description'>
 								<h2 className='item-attribute'>Job Description</h2>

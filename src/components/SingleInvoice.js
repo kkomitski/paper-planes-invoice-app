@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 
-export default function SingleInvoice({ id, client, total, createdAt, status }) {
+export default function SingleInvoice({ id, client, total, createdAt, status, due }) {
 	const [currentStatus, setStatus] = useState('');
-	const [date, setDate] = useState('');
-	// const { id, invoice } = props;
-	// const due = invoice.createdAt
-	// 	.toDate()
-	// 	.toLocaleString('en-GB', { month: 'long', day: 'numeric', year: 'numeric' });
+	const [date, setDueDate] = useState('');
 
 	const getDate = async () => {
-		const due = createdAt
-			.toDate()
-			.toLocaleString('en-GB', { month: 'long', day: 'numeric', year: 'numeric' });
-		setDate(due);
+		const creationDate = new Date(createdAt.toDate());
+		creationDate.setDate(creationDate.getDate() + due);
+		const displayDue = creationDate.toLocaleString('en-GB', {
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric',
+		});
+		setDueDate(displayDue);
 	};
 
 	// Draft
@@ -35,7 +35,6 @@ export default function SingleInvoice({ id, client, total, createdAt, status }) 
 			default:
 				setStatus('paid');
 		}
-		// console.log(invoice.status);
 	};
 
 	useEffect(() => {
@@ -52,7 +51,6 @@ export default function SingleInvoice({ id, client, total, createdAt, status }) 
 			<div className='due-and-status'>
 				<div className='due-and-total'>
 					<h2 className='due'>Due {date}</h2>
-					{/* <h1 className='total'>£ {total}</h1> */}
 					<h1 className='total'>£ {parseFloat(total).toFixed(2)}</h1>
 				</div>
 				<div className={`status-container ${currentStatus}`}>
@@ -60,7 +58,6 @@ export default function SingleInvoice({ id, client, total, createdAt, status }) 
 					<h4 className='status'>{status}</h4>
 				</div>
 			</div>
-			{/* <h1>></h1> */}
 		</div>
 	);
 }
