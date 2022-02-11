@@ -57,7 +57,7 @@ export default function SignUp() {
 	}
 
 	return (
-		<>
+		<article className='field-container'>
 			<fieldset className='field'>
 				<form className='form' onSubmit={handleSubmit}>
 					<legend className='auth-title'>Sign Up</legend>
@@ -80,6 +80,6 @@ export default function SignUp() {
 					</div>
 				</form>
 			</fieldset>
-		</>
+		</article>
 	);
 }

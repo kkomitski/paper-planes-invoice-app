@@ -30,7 +30,7 @@ export function ForgotPassword() {
 	}
 
 	return (
-		<>
+		<article className='field-container'>
 			<fieldset className='field'>
 				<form className='form' onSubmit={handleSubmit}>
 					<legend className='auth-title'>Reset Password</legend>
@@ -54,6 +54,6 @@ export function ForgotPassword() {
 					</div>
 				</form>
 			</fieldset>
-		</>
+		</article>
 	);
 }

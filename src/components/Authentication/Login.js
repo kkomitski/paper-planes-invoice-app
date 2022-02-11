@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 // Styles
 import '../../App.css';
+import plane from '../../assets/maxresdefault.png';
 
 export function Login() {
 	const emailRef = useRef();
@@ -36,7 +37,7 @@ export function Login() {
 	}
 
 	return (
-		<>
+		<article className='field-container'>
 			<fieldset className='field'>
 				<form className='form' onSubmit={handleSubmit}>
 					<legend className='auth-title'>Login</legend>
@@ -61,6 +62,7 @@ export function Login() {
 					</div>
 				</form>
 			</fieldset>
-		</>
+			<img className='paper-plane' src={plane} alt='paper plane' />
+		</article>
 	);
 }
