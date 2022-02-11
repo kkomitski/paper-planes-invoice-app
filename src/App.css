@@ -230,7 +230,7 @@ a {
 	/* height: 60%; */
 	width: 85%;
 	height: auto;
-	max-height: 800px;
+	/* max-width: 1750px; */
 	position: absolute;
 	z-index: -2;
 	/* display: none; */
