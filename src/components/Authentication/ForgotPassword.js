@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 // import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import plane from '../../assets/maxresdefault.png';
 
 export function ForgotPassword() {
 	const emailRef = useRef();
@@ -54,6 +55,7 @@ export function ForgotPassword() {
 					</div>
 				</form>
 			</fieldset>
+			<img className='paper-plane' src={plane} alt='paper plane' />
 		</article>
 	);
 }

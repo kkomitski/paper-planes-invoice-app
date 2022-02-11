@@ -14,6 +14,7 @@ import {
 	setDoc,
 } from 'firebase/firestore';
 import { db } from '../../firebase-config';
+import plane from '../../assets/maxresdefault.png';
 
 export default function SignUp() {
 	const emailRef = useRef();
@@ -80,6 +81,7 @@ export default function SignUp() {
 					</div>
 				</form>
 			</fieldset>
+			<img className='paper-plane' src={plane} alt='paper plane' />
 		</article>
 	);
 }
