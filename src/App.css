@@ -103,9 +103,6 @@ body {
 main {
 	width: 100%;
 	height: 100%;
-	/* display: flex; */
-	/* align-items: center; */
-	/* justify-content: center; */
 }
 
 .section-center {
@@ -118,6 +115,7 @@ main {
 	align-items: center;
 	justify-content: center;
 	transition: var(--transition);
+	/* position: relative; */
 	/*  */
 	/* overflow: hidden; */
 }
@@ -483,8 +481,14 @@ a {
 ================================================================================
 */
 
-.invoices-section {
+.main-section {
 	margin: 45px 1rem auto 1rem;
+	height: calc(100vh - 45px);
+}
+
+.main-section__container {
+	/* height: calc(100% - 45px); */
+	height: 100%;
 }
 
 .title-container {
@@ -558,17 +562,17 @@ a {
 	.due-and-status {
 		margin-top: 2rem;
 	}
-	.invoices-section {
+	.main-section {
 		margin: 75px 1rem auto 1rem;
 	}
 }
 
 @media screen and (min-width: 865px) {
-	.invoices-section-container {
+	.main-section__container {
 		margin-left: 75px;
 	}
 
-	.invoices-section {
+	.main-section {
 		max-width: 950px;
 		margin: 0 auto;
 		padding: 0 1rem;
@@ -622,7 +626,7 @@ a {
 		padding: 1rem 0;
 	}
 
-	.invoice-title {
+	.page-title {
 		font-size: 3rem;
 		padding: 3rem 0;
 	}
@@ -1018,6 +1022,7 @@ a {
 	font-size: 0.75rem;
 	cursor: pointer;
 	transition: var(--transition);
+	/* max-height: 40px; */
 }
 
 .item-attribute {
@@ -1378,4 +1383,134 @@ button {
 	height: 0;
 	padding: 0;
 	border: none;
+}
+
+/* 
+================
+ ____                __  _  _       
+|  _ \  _ __  ___   / _|(_)| |  ___ 
+| |_) || '__|/ _ \ | |_ | || | / _ \
+|  __/ | |  | (_) ||  _|| || ||  __/
+|_|    |_|   \___/ |_|  |_||_| \___|
+                                    
+================
+*/
+
+.profile-page-container {
+	background: var(--element);
+	border-radius: var(--radius-2);
+	padding: 1.25rem;
+	z-index: 0;
+	height: calc(100% - 70px);
+	/* height: 100%; */
+}
+
+.company-logo-container {
+	background-color: var(--icons);
+	border-radius: 50%;
+	height: 60px;
+	width: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.business-info-fieldset {
+	width: 100%;
+	height: 100%;
+	font-size: 0.875rem;
+	gap: 0.5rem;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-rows: auto;
+	align-items: center;
+}
+
+.name-and-logo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	grid-column: auto / span 6;
+}
+
+.update-street {
+	grid-column: auto / span 3;
+}
+
+.update-city {
+	grid-column: auto / span 3;
+}
+
+.update-postcode {
+	grid-column: auto / span 3;
+}
+
+.update-country {
+	grid-column: auto / span 3;
+}
+
+.update-street {
+	grid-column: auto / span 3;
+}
+
+.update-business-number {
+	grid-column: auto / span 3;
+}
+
+.update-vat-registration {
+	grid-column: auto / span 3;
+}
+
+.update-email {
+	grid-column: auto / span 6;
+}
+
+.update-password {
+	grid-column: auto / span 3;
+}
+
+.update-password-confirm {
+	grid-column: auto / span 3;
+}
+
+.update-info {
+	grid-column: auto / span 3;
+	background-color: var(--draft-bg);
+}
+
+.cancel-button {
+	grid-column: auto / span 3;
+	background-color: var(--draft-bg);
+	/* background-color: var(--delete); */
+}
+
+.logout-button {
+	grid-column: auto / span 6;
+	background-color: var(--highlight);
+}
+
+@media screen and (min-width: 568px) {
+	.profile-page-container {
+		height: calc(100% - 150px);
+	}
+}
+
+@media screen and (min-width: 865px) {
+	.profile-page-container {
+		max-height: 800px;
+		/* margin-bottom: 3rem; */
+	}
+
+	.name-and-logo {
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	.company-logo-container {
+		order: 0;
+	}
+
+	.company-name {
+		order: 1;
+	}
 }

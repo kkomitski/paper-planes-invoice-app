@@ -45,10 +45,10 @@ export default function Invoices() {
 
 	useEffect(() => getInvoices(), []);
 	return (
-		<section className='invoices-section'>
-			<article className='invoices-section-container'>
+		<section className='main-section'>
+			<article className='main-section__container'>
 				<div className='title-container'>
-					<h1 className='invoice-title'>Invoices</h1>
+					<h1 className='page-title'>Invoices</h1>
 					<h2 className='filter'>Filter</h2>
 				</div>
 				{/* {loading === true ? console.log('Loading invoices..') : console.log('Done.')} */}

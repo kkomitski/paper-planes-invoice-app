@@ -17,22 +17,22 @@ import { ForgotPassword } from './components/Authentication/ForgotPassword';
 
 function App() {
 	return (
-		<main className='main'>
-			<section className='section-center'>
-				<Router>
-					<AuthProvider>
-						<Routes>
-							<Route exact path='/' element={<PrivateRoute />}>
-								<Route path='/' element={<Dashboard />} />
-							</Route>
-							<Route exact path='/signup' element={<SignUp />} />
-							<Route exact path='/login' element={<Login />} />
-							<Route exact path='/forgot-password' element={<ForgotPassword />} />
-						</Routes>
-					</AuthProvider>
-				</Router>
-			</section>
-		</main>
+		// <main className='main'>
+		<section className='section-center'>
+			<Router>
+				<AuthProvider>
+					<Routes>
+						<Route exact path='/' element={<PrivateRoute />}>
+							<Route path='/' element={<Dashboard />} />
+						</Route>
+						<Route exact path='/signup' element={<SignUp />} />
+						<Route exact path='/login' element={<Login />} />
+						<Route exact path='/forgot-password' element={<ForgotPassword />} />
+					</Routes>
+				</AuthProvider>
+			</Router>
+		</section>
+		// </main>
 	);
 }
 

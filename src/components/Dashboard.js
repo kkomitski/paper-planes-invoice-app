@@ -10,20 +10,18 @@ import SwitchComponents from './SwitchComponents';
 import Invoices from './Invoices';
 import { UpdateProfile } from './Authentication/UpdateProfile';
 
-export function Dashboard() {
-	const [activeComponent, setActiveComponent] = useState('invoices');
+export let page = 'invoices';
 
-	const toggleProfilePage = (page) => {
-		setActiveComponent(page);
-	};
+export function Dashboard() {
+	const [activeComponent, setActiveComponent] = useState(page);
 
 	return (
-		<main className='dashboard'>
-			<Header toggleProfilePage={toggleProfilePage} activeComponent={activeComponent} />
+		<article className='dashboard'>
+			<Header activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
 			<Overlay />
 			<SwitchComponents active={activeComponent}>
 				<Invoices name='invoices' />
-				<UpdateProfile name='update-profile' />
+				<UpdateProfile setActiveComponent={setActiveComponent} name='update-profile' />
 			</SwitchComponents>
 			{/* {page} */}
 			{/* <br />
@@ -35,6 +33,6 @@ export function Dashboard() {
 			<button type='link' style={{ position: 'absolute' }} className='btn' onClick={handleLogout}>
 				Log Out
 			</button> */}
-		</main>
+		</article>
 	);
 }
