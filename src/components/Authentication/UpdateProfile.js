@@ -66,9 +66,10 @@ export function UpdateProfile({ setActiveComponent }) {
 							<div className='name-and-logo'>
 								<h1 className='company-name'>Company Name</h1>
 								<div className='company-logo-container'>
-									<h2>logo</h2>
+									<h2 className='company-logo'>logo</h2>
 								</div>
 							</div>
+							{/* <div className='error'>{error}</div> */}
 							<div className='update-street'>
 								<h2 className='item-attribute'>Street</h2>
 								<input className='new-invoice-input' type='text' />
@@ -127,7 +128,7 @@ export function UpdateProfile({ setActiveComponent }) {
 									placeholder='Leave blank to keep the same'
 								/>{' '}
 							</div>
-							<div className='add-items update-info' disabled={loading}>
+							<div onClick={handleSubmit} className='add-items update-info' disabled={loading}>
 								Update
 							</div>
 							<div

@@ -1406,13 +1406,17 @@ button {
 }
 
 .company-logo-container {
-	background-color: var(--icons);
+	background-color: var(--draft-bg);
 	border-radius: 50%;
 	height: 60px;
 	width: 60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.company-logo {
+	color: var(--draft-text);
 }
 
 .business-info-fieldset {
@@ -1430,6 +1434,10 @@ button {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	grid-column: auto / span 6;
+}
+
+.profile-page-container > .error {
 	grid-column: auto / span 6;
 }
 
@@ -1481,7 +1489,6 @@ button {
 .cancel-button {
 	grid-column: auto / span 3;
 	background-color: var(--draft-bg);
-	/* background-color: var(--delete); */
 }
 
 .logout-button {
@@ -1512,5 +1519,15 @@ button {
 
 	.company-name {
 		order: 1;
+	}
+}
+
+@media screen and (min-width: 1175px) {
+	.update-info:hover {
+		background-color: var(--paid-text);
+	}
+
+	.cancel-button:hover {
+		background-color: var(--delete);
 	}
 }
