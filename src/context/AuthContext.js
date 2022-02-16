@@ -51,7 +51,13 @@ export function AuthProvider({ children }) {
 		let isMounted = true;
 		auth.onAuthStateChanged((user) => {
 			if (isMounted) {
-				setCurrentUser(user);
+				if (user) {
+					setCurrentUser(user);
+					localStorage.setItem('isSigned', true);
+				} else {
+					console.log('user-signed out');
+					localStorage.setItem('isSigned', false);
+				}
 			}
 		});
 
@@ -59,6 +65,19 @@ export function AuthProvider({ children }) {
 			isMounted = false;
 		};
 	}, []);
+
+	// useEffect(() => {
+	// 	let isMounted = true;
+	// 	auth.onAuthStateChanged((user) => {
+	// 		if (isMounted) {
+	// 			setCurrentUser(user);
+	// 		}
+	// 	});
+
+	// 	return () => {
+	// 		isMounted = false;
+	// 	};
+	// }, []);
 
 	const value = { currentUser, signup, login, logout, reset, updateUserEmail, updateUserPassword };
 

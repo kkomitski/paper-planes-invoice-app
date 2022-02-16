@@ -106,7 +106,7 @@ main {
 }
 
 .section-center {
-	/* height: 100vh; */
+	/* height: 100vh; min-height: -webkit-fill-available; */
 	/* width: 100vw; */
 	/* min-height: 100; */
 	height: 100%;
@@ -217,6 +217,7 @@ a {
 
 .field-container {
 	height: 100vh;
+	min-height: -webkit-fill-available;
 	width: 100vw;
 	display: flex;
 	align-items: center;
@@ -428,6 +429,7 @@ a {
 	.header {
 		width: 75px;
 		height: 100vh;
+		min-height: -webkit-fill-available;
 		flex-direction: column;
 		border-top-right-radius: 20px;
 		z-index: 2;
@@ -686,13 +688,14 @@ a {
 	transition: var(--transition);
 	width: 100vw;
 	height: 50px;
-	/* min-height: 100vh; */
+	/* min-height: 100vh; min-height: -webkit-fill-available; */
 	max-width: 750px;
 	/* transform: translateX(-500px); */
 }
 
 .overlay {
 	height: 100vh;
+	min-height: -webkit-fill-available;
 	background: var(--draft-bg);
 	z-index: 3;
 	transition: var(--transition);
@@ -723,6 +726,7 @@ a {
 .add-items-form {
 	width: 50%;
 	height: 100vh;
+	min-height: -webkit-fill-available;
 }
 
 .open {
@@ -766,7 +770,7 @@ a {
 
 	.add-items-form {
 		width: 0;
-		height: 100vh;
+		height: 100vh; min-height: -webkit-fill-available;
 	}
 } */
 
@@ -807,6 +811,7 @@ a {
 	font-size: 0.5rem;
 	padding: 0.6rem;
 	border-radius: var(--radius-1);
+	caret-color: var(--text-primary);
 }
 
 .new-invoice-input::placeholder {
@@ -1396,13 +1401,36 @@ button {
 ================
 */
 
+.update-info-input {
+	width: 100%;
+	margin-top: 0.4rem;
+	font-size: 0.5rem;
+	padding: 0.6rem;
+	border-radius: var(--radius-1);
+	/* background-color: var(--secondary); */
+}
+
 .profile-page-container {
 	background: var(--element);
 	border-radius: var(--radius-2);
 	padding: 1.25rem;
 	z-index: 0;
 	height: calc(100% - 70px);
-	/* height: 100%; */
+}
+
+.profile-update {
+	transform: translateY(1rem);
+	height: calc(100vh - 5px);
+}
+
+.profile-title {
+	display: none;
+	padding: none;
+}
+
+.update-profile-error {
+	text-align: start;
+	margin-top: -1.5rem;
 }
 
 .company-logo-container {
@@ -1419,6 +1447,10 @@ button {
 	color: var(--draft-text);
 }
 
+input[type='file'] {
+	display: none;
+}
+
 .business-info-fieldset {
 	width: 100%;
 	height: 100%;
@@ -1428,6 +1460,7 @@ button {
 	grid-template-columns: repeat(6, 1fr);
 	grid-template-rows: auto;
 	align-items: center;
+	border: none;
 }
 
 .name-and-logo {
@@ -1437,8 +1470,33 @@ button {
 	grid-column: auto / span 6;
 }
 
-.profile-page-container > .error {
+.business-info-fieldset > .error {
+	text-align: center;
 	grid-column: auto / span 6;
+}
+
+.company-name {
+	border: none;
+	background-color: var(--element);
+	font-size: 1.15rem;
+	padding: 0;
+}
+.company-name:active {
+	border: none;
+}
+
+.company-name:focus {
+	border: none;
+	outline: none;
+}
+
+.company-name:-webkit-autofill,
+.company-name:-webkit-autofill:hover,
+.company-name:-webkit-autofill:focus,
+.company-name:-webkit-autofill:active {
+	border: none;
+	outline: none;
+	border-radius: 0;
 }
 
 .update-street {
@@ -1477,8 +1535,16 @@ button {
 	grid-column: auto / span 3;
 }
 
+#password::placeholder {
+	color: var(--secondary);
+}
+
 .update-password-confirm {
 	grid-column: auto / span 3;
+}
+
+#password-confirm::placeholder {
+	color: var(--secondary);
 }
 
 .update-info {
@@ -1498,7 +1564,8 @@ button {
 
 @media screen and (min-width: 568px) {
 	.profile-page-container {
-		height: calc(100% - 150px);
+		/* height: calc(100% - 150px); */
+		height: calc(100% - 100px);
 	}
 }
 
@@ -1519,6 +1586,24 @@ button {
 
 	.company-name {
 		order: 1;
+	}
+
+	.update-info-input {
+		font-size: 0.875rem;
+	}
+
+	.profile-update {
+		transform: translateY(0);
+		/* height: calc(100vh - 5px); */
+	}
+
+	.profile-title {
+		display: flex;
+	}
+
+	.update-profile-error {
+		text-align: center;
+		margin: -0.5rem;
 	}
 }
 
