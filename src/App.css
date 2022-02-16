@@ -1434,13 +1434,28 @@ button {
 }
 
 .company-logo-container {
-	background-color: var(--draft-bg);
 	border-radius: 50%;
-	height: 60px;
-	width: 60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.without-logo {
+	height: 60px;
+	width: 60px;
+	background-color: var(--draft-bg);
+}
+
+.with-logo {
+	height: 100%;
+	width: auto;
+	background: none;
+}
+
+.logo-img {
+	max-width: 100px;
+	max-height: 75px;
+	height: 100%;
 }
 
 .company-logo {
