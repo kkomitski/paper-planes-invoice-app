@@ -21,6 +21,8 @@ export default function SingleInvoice(props) {
 	} = props;
 	const [currentStatus, setStatus] = useState('');
 	const [date, setDueDate] = useState('');
+	const [show, setShow] = useState('less');
+	const [hightlight, setHighlight] = useState('highlight-off');
 
 	const { currentUser } = useAuth();
 
@@ -54,7 +56,8 @@ export default function SingleInvoice(props) {
 		}
 	};
 
-	const statusToggle = () => {
+	const statusToggle = (e) => {
+		e.stopPropagation();
 		if (status === 'Pending' || status === 'Overdue') {
 			setDoc(
 				doc(db, 'users', currentUser.email, 'Invoices', id),
@@ -70,14 +73,25 @@ export default function SingleInvoice(props) {
 		}
 	};
 
+	const showMore = (e) => {
+		e.stopPropagation();
+		if (show === 'less') {
+			setShow('more');
+			setHighlight('highlight-on');
+		} else {
+			setShow('less');
+			setHighlight('highlight-off');
+		}
+	};
+
 	useEffect(() => {
 		getStatus();
 		getDate();
 	}, [status]);
 
 	return (
-		<>
-			<div className='invoice-container'>
+		<div className='single-invoice'>
+			<div onClick={(e) => showMore(e)} className={`${hightlight} invoice-container`}>
 				<div className='name-and-id'>
 					<h3 className='id'>#{id.slice(0, 5)}</h3>
 					<h2 className='name'>{client}</h2>
@@ -87,17 +101,19 @@ export default function SingleInvoice(props) {
 						<h2 className='due'>Due {date}</h2>
 						<h1 className='total'>£ {parseFloat(total).toFixed(2)}</h1>
 					</div>
-					<div onClick={() => statusToggle()} className={`status-container ${currentStatus}`}>
+					<div onClick={(e) => statusToggle(e)} className={`status-container ${currentStatus}`}>
 						<div className='dot'>•</div>
 						<h4 className='status'>{status}</h4>
 					</div>
 				</div>
 			</div>
-			{/* <div className={`full-info`}>
-				<div className='full-info-title-container'>
-					<h1 className='full-info-title'>{jobDescription}</h1>
+			<div className={`full-info ${show}`}>
+				<div className='full-info-container'>
+					<div className='full-info-title-container'>
+						<h1 className='full-info-title'>{jobDescription}</h1>
+					</div>
 				</div>
-			</div> */}
-		</>
+			</div>
+		</div>
 	);
 }

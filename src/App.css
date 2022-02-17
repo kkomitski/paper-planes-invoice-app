@@ -500,12 +500,50 @@ a {
 	justify-content: space-between;
 }
 
+.single-invoice {
+	margin-bottom: 1.25rem;
+	overflow: hidden;
+	transition: var(--transition);
+}
+
 .invoice-container {
 	background: var(--element);
-	border-radius: var(--radius-2);
 	padding: 1.75rem;
-	margin-bottom: 1.25rem;
 	z-index: 0;
+	transition: var(--transition);
+}
+
+.highlight-off {
+	background-color: var(--element);
+	border-bottom-left-radius: var(--radius-2);
+	border-bottom-right-radius: var(--radius-2);
+	border-top-right-radius: var(--radius-2);
+	border-top-left-radius: var(--radius-2);
+}
+
+.highlight-on {
+	background-color: var(--highlight);
+	border-top-right-radius: var(--radius-2);
+	border-top-left-radius: var(--radius-2);
+	border-bottom-left-radius: none;
+	border-bottom-right-radius: none;
+}
+
+.full-info {
+	background-color: var(--element);
+	transition: var(--transition);
+}
+
+.full-info-container {
+	padding: 1.75rem;
+}
+
+.less {
+	height: 0;
+}
+
+.more {
+	height: 400px;
 }
 
 .name-and-id {
