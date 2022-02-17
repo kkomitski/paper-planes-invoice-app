@@ -1,4 +1,5 @@
 import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { set } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useAuth } from '../context/AuthContext';
@@ -26,6 +27,8 @@ export default function SingleInvoice(props) {
 	const [date, setDueDate] = useState('');
 	const [show, setShow] = useState('less');
 	const [hightlight, setHighlight] = useState('highlight-off');
+	const [confirmationState, setConfirmatinoState] = useState('Delete');
+	const [cancelState, setCancelState] = useState('cancel-closed');
 
 	const { currentUser } = useAuth();
 
@@ -93,11 +96,15 @@ export default function SingleInvoice(props) {
 		} else {
 			setShow('less');
 			setHighlight('highlight-off');
+			setConfirmatinoState('Delete');
+			setCancelState('cancel-closed');
 		}
 	};
 
 	const deleteInvoice = async () => {
-		await deleteDoc(doc(db, 'users', currentUser.email, 'Invoices', id));
+		if (confirmationState === 'Confirm?') {
+			await deleteDoc(doc(db, 'users', currentUser.email, 'Invoices', id));
+		}
 	};
 
 	useEffect(() => {
@@ -134,7 +141,8 @@ export default function SingleInvoice(props) {
 						<div className='description-creation'>
 							<h1 className='full-info-title'>{jobDescription}</h1>
 							{/* <h2> */}
-							From:{' '}
+							From:
+							<br />
 							{createdAt.toDate().toLocaleString('en-GB', {
 								month: 'long',
 								day: 'numeric',
@@ -172,8 +180,32 @@ export default function SingleInvoice(props) {
 				<div className='full-info-footer'>
 					<div className='full-info-buttons-container'>
 						<div className='full-info-btns edit-invoice'>Edit</div>
-						<div onClick={() => deleteInvoice()} className='full-info-btns delete-invoice'>
-							Delete
+						{/* <div onClick={() => confirmDelete()} className='full-info-btns delete-invoice'>
+							{deleteConfirmation}
+						</div> */}
+						{/* {deleteConfirmation} */}
+						<div className='confirmation'>
+							<div className={`no ${cancelState}`}>
+								<div
+									onClick={() => {
+										setCancelState('cancel-closed');
+										setConfirmatinoState('Delete');
+									}}
+									className={`full-info-btns`}
+								>
+									Cancel
+								</div>
+							</div>
+							<div
+								onClick={() => {
+									setCancelState('cancel-open');
+									setConfirmatinoState('Confirm?');
+									deleteInvoice();
+								}}
+								className='full-info-btns delete-invoice yes'
+							>
+								{confirmationState}
+							</div>
 						</div>
 					</div>
 					<h1 className='full-info-total'>
