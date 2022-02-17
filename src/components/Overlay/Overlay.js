@@ -381,7 +381,13 @@ export default function Overlay() {
 							</div>
 							<div className='job-description'>
 								<h2 className='item-attribute'>Job Description</h2>
-								<input ref={jobDescription} type='text' className='new-invoice-input' />
+								<input
+									ref={jobDescription}
+									name='job-description'
+									onChange={(e) => addInfoToForm(e)}
+									type='text'
+									className='new-invoice-input'
+								/>
 							</div>
 							<div onClick={() => toggleInputField()} className={`add-items ${addState}`}>
 								+ Add Items

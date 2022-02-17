@@ -4,7 +4,21 @@ import '../App.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
 
-export default function SingleInvoice({ id, client, total, createdAt, status, due }) {
+export default function SingleInvoice(props) {
+	const {
+		id,
+		client,
+		total,
+		createdAt,
+		status,
+		due,
+		'job-description': jobDescription,
+		'client-city': clientCity,
+		'client-country': clientCountry,
+		'client-email': clientEmail,
+		'client-postcode': clientPostcode,
+		'client-street': clientStreet,
+	} = props;
 	const [currentStatus, setStatus] = useState('');
 	const [date, setDueDate] = useState('');
 
@@ -79,7 +93,11 @@ export default function SingleInvoice({ id, client, total, createdAt, status, du
 					</div>
 				</div>
 			</div>
-			<div className={`full-info`}></div>
+			{/* <div className={`full-info`}>
+				<div className='full-info-title-container'>
+					<h1 className='full-info-title'>{jobDescription}</h1>
+				</div>
+			</div> */}
 		</>
 	);
 }
