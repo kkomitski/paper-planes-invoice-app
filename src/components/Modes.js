@@ -9,6 +9,7 @@ let root = document.documentElement;
 
 // Dark
 const darkPrimary = getComputedStyle(root).getPropertyValue('--dark-primary');
+const darkSecondary = getComputedStyle(root).getPropertyValue('--dark-secondary');
 const darkElement = getComputedStyle(root).getPropertyValue('--dark-element');
 const darkTextPrimary = getComputedStyle(root).getPropertyValue('--dark-text-primary');
 const darkTextSecondary = getComputedStyle(root).getPropertyValue('--dark-text-secondary');
@@ -24,6 +25,7 @@ const darkdraftBg = getComputedStyle(root).getPropertyValue('--dark-draft-bg');
 
 // Light
 const lightPrimary = getComputedStyle(root).getPropertyValue('--light-primary');
+const lightSecondary = getComputedStyle(root).getPropertyValue('--light-secondary');
 const lightElement = getComputedStyle(root).getPropertyValue('--light-element');
 const lightTextPrimary = getComputedStyle(root).getPropertyValue('--light-text-primary');
 const lightTextSecondary = getComputedStyle(root).getPropertyValue('--light-text-secondary');
@@ -47,6 +49,7 @@ export function Mode() {
 		if (mode === dark) {
 			setMode(light);
 			root.style.setProperty('--primary', lightPrimary);
+			root.style.setProperty('--secondary', lightSecondary);
 			root.style.setProperty('--element', lightElement);
 			root.style.setProperty('--text-primary', lightTextPrimary);
 			root.style.setProperty('--text-secondary', lightTextSecondary);
@@ -62,6 +65,7 @@ export function Mode() {
 		} else {
 			setMode(dark);
 			root.style.setProperty('--primary', darkPrimary);
+			root.style.setProperty('--secondary', darkSecondary);
 			root.style.setProperty('--element', darkElement);
 			root.style.setProperty('--text-primary', darkTextPrimary);
 			root.style.setProperty('--text-secondary', darkTextSecondary);

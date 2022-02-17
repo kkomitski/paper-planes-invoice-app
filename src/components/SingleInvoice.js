@@ -1,4 +1,4 @@
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useAuth } from '../context/AuthContext';
@@ -18,7 +18,10 @@ export default function SingleInvoice(props) {
 		'client-email': clientEmail,
 		'client-postcode': clientPostcode,
 		'client-street': clientStreet,
+		items,
 	} = props;
+
+	const [userInfo, setUserInfo] = useState('');
 	const [currentStatus, setStatus] = useState('');
 	const [date, setDueDate] = useState('');
 	const [show, setShow] = useState('less');
@@ -26,7 +29,7 @@ export default function SingleInvoice(props) {
 
 	const { currentUser } = useAuth();
 
-	const getDate = async () => {
+	const getDate = () => {
 		const creationDate = new Date(createdAt.toDate());
 		creationDate.setDate(creationDate.getDate() + due);
 		const displayDue = creationDate.toLocaleString('en-GB', {
@@ -54,6 +57,15 @@ export default function SingleInvoice(props) {
 			default:
 				setStatus('paid');
 		}
+	};
+
+	const getCurrentUserInfo = () => {
+		const userInfoRef = doc(db, 'users', currentUser.email);
+		onSnapshot(userInfoRef, (snapshot) => {
+			const currentUserInfo = snapshot.data();
+			setUserInfo(currentUserInfo);
+		});
+		getDate();
 	};
 
 	const statusToggle = (e) => {
@@ -84,10 +96,15 @@ export default function SingleInvoice(props) {
 		}
 	};
 
+	const deleteInvoice = async () => {
+		await deleteDoc(doc(db, 'users', currentUser.email, 'Invoices', id));
+	};
+
 	useEffect(() => {
-		getStatus();
-		getDate();
-	}, [status]);
+		getCurrentUserInfo();
+	}, []);
+
+	useEffect(() => getStatus(), [status]);
 
 	return (
 		<div className='single-invoice'>
@@ -101,7 +118,11 @@ export default function SingleInvoice(props) {
 						<h2 className='due'>Due {date}</h2>
 						<h1 className='total'>£ {parseFloat(total).toFixed(2)}</h1>
 					</div>
-					<div onClick={(e) => statusToggle(e)} className={`status-container ${currentStatus}`}>
+					<div
+						onClick={(e) => statusToggle(e)}
+						// style={{ background: '#da6d6d', color: '#fbeeee' }}
+						className={`status-container ${currentStatus}`}
+					>
 						<div className='dot'>•</div>
 						<h4 className='status'>{status}</h4>
 					</div>
@@ -110,8 +131,54 @@ export default function SingleInvoice(props) {
 			<div className={`full-info ${show}`}>
 				<div className='full-info-container'>
 					<div className='full-info-title-container'>
-						<h1 className='full-info-title'>{jobDescription}</h1>
+						<div className='description-creation'>
+							<h1 className='full-info-title'>{jobDescription}</h1>
+							{/* <h2> */}
+							From:{' '}
+							{createdAt.toDate().toLocaleString('en-GB', {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric',
+							})}{' '}
+							{/* </h2> */}
+							<h2>(Expected within: {due} days)</h2>
+						</div>
+						<div className='client-address-info'>
+							<h2>{clientStreet}</h2>
+							<h2>{clientCity}</h2>
+							<h2>{clientPostcode}</h2>
+							<h2>{clientCountry}</h2>
+						</div>
 					</div>
+					<div className='full-info-items'>
+						<div className='full-info-single-item'>
+							<h2 className='full-info-item-name'>Item Name</h2>
+							<h2>Qty</h2>
+							<h2>Price</h2>
+							<h2>Total</h2>
+						</div>
+						{items.map((item) => {
+							return (
+								<div className='full-info-single-item'>
+									<h4 className='full-info-item-name'>{item.name}</h4>
+									<h4>{item.quantity}</h4>
+									<h4>£{item.price}</h4>
+									<h4>£{item.total}</h4>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+				<div className='full-info-footer'>
+					<div className='full-info-buttons-container'>
+						<div className='full-info-btns edit-invoice'>Edit</div>
+						<div onClick={() => deleteInvoice()} className='full-info-btns delete-invoice'>
+							Delete
+						</div>
+					</div>
+					<h1 className='full-info-total'>
+						<h2>Amount Due</h2> £{total.toFixed(2)}
+					</h1>
 				</div>
 			</div>
 		</div>
