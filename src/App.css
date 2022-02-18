@@ -82,6 +82,18 @@ Variables
 	margin: 0;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
 /* 
 ================================================================================
    ____   _           _               _ 
@@ -606,7 +618,17 @@ a {
 	text-align: end;
 }
 
-.full-info-item-name {
+.full-info-item {
+	text-align: end;
+	padding: 0;
+	border: none;
+}
+
+.edit-name {
+	text-align: start;
+}
+
+.edit-job-description {
 	text-align: start;
 }
 
@@ -634,6 +656,7 @@ a {
 	font-size: 0.75rem;
 	cursor: pointer;
 	align-self: flex-end;
+	transition: var(--transition);
 }
 
 .delete-invoice {
@@ -646,22 +669,19 @@ a {
 	color: var(--dark-text-primary);
 }
 
+.save-edit {
+	background-color: var(--paid-text);
+	color: var(--dark-text-primary);
+}
+
 .confirmation {
-	/* width: 75px; */
 	width: auto;
 	display: flex;
-	/* flex: 1 1; */
 	justify-content: space-between;
 	background-color: var(--primary);
 	border-radius: 25px;
 	overflow: hidden;
 	transition: var(--transition);
-	/* position: absolute; */
-	/* transform: translateX(calc(75px + 1rem)); */
-}
-
-.yes {
-	/* width: 55px; */
 }
 
 .no {

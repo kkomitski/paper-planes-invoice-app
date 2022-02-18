@@ -44,6 +44,7 @@ export default function SignUp() {
 					email: credentials.user.email,
 					createdAt: serverTimestamp(),
 					'company-name': 'Company Name',
+					invoiceIDsCounter: 0,
 					// invoices: addDoc(collection(db, 'users', credentials.user.email, 'Invoices')),
 				});
 				// addDoc(collection(db, 'users', credentials.user.email, 'Invoices'));

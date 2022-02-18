@@ -2,7 +2,17 @@ import React, { useRef, useState } from 'react';
 import plus from '../../assets/plus-circle-solid.svg';
 import '../../App.css';
 import Item from './Item';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	doc,
+	serverTimestamp,
+	setDoc,
+	updateDoc,
+	increment,
+	decrement,
+	getDoc,
+} from 'firebase/firestore';
 import { db } from '../../firebase-config';
 import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
@@ -159,9 +169,14 @@ export default function Overlay() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const downloadPdf = () => {
-		console.log(formData);
-		// clearAllInputs();
+	let newInvoiceID = 0;
+	const invoicesIDRef = doc(db, 'users', currentUser.email);
+	const downloadPdf = async () => {
+		const invoicesIDs = await getDoc(invoicesIDRef);
+		// const foo = invoicesIDs.data().invoiceIDsCounter + 1;
+		const foo = invoicesIDs.data().invoiceIDsCounter + 1;
+		newInvoiceID = foo;
+		console.log(newInvoiceID);
 	};
 
 	const clearAllInputs = () => {
@@ -172,10 +187,71 @@ export default function Overlay() {
 	};
 
 	const saveInvoice = async () => {
+		try {
+			if (formData.client && formData.total) {
+				// const newInvoiceID = await downloadPdf();
+				await downloadPdf();
+
+				// console.log(newInvoiceID.toData());
+				await setDoc(doc(db, 'users', currentUser.email, 'Invoices', `invoice-${newInvoiceID}`), {
+					...formData,
+					invoiceID: newInvoiceID,
+				});
+				updateDoc(invoicesIDRef, { invoiceIDsCounter: increment(1) });
+				// Reset
+				setOverlayContainerState('closed');
+				setItems([{ id: 0 }]);
+				setTimeout(() => setField('info'), 500);
+				setItems([]);
+				clientClient.current.setAttribute('placeholder', '');
+				setAddState('add');
+				setFormData(blankForm);
+				clearAllInputs();
+			} else if (formData.client && !formData.total) {
+				setAddState('add-error');
+			} else if (!formData.client && formData.total) {
+				clientClient.current.setAttribute('placeholder', 'Please add client');
+			} else {
+				clientClient.current.setAttribute('placeholder', 'Please add client');
+				setAddState('add-error');
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+	// const saveInvoice = async () => {
+	// 	if (formData.client && formData.total) {
+	// 		await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
+	// 			...formData,
+	// 		});
+	// 		// Reset
+	// 		setOverlayContainerState('closed');
+	// 		setItems([{ id: 0 }]);
+	// 		setTimeout(() => setField('info'), 500);
+	// 		setItems([]);
+	// 		clientClient.current.setAttribute('placeholder', '');
+	// 		setAddState('add');
+	// 		setFormData(blankForm);
+	// 		clearAllInputs();
+	// 	} else if (formData.client && !formData.total) {
+	// 		setAddState('add-error');
+	// 	} else if (!formData.client && formData.total) {
+	// 		clientClient.current.setAttribute('placeholder', 'Please add client');
+	// 	} else {
+	// 		clientClient.current.setAttribute('placeholder', 'Please add client');
+	// 		setAddState('add-error');
+	// 	}
+	// };
+
+	const updateInvoice = async (id) => {
 		if (formData.client && formData.total) {
-			await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
-				...formData,
-			});
+			await setDoc(
+				collection(db, 'users', currentUser.email, 'Invoices', `invoice-${id}`),
+				{
+					...formData,
+				},
+				{ merge: true }
+			);
 			// Reset
 			setOverlayContainerState('closed');
 			setItems([{ id: 0 }]);

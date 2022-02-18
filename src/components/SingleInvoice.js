@@ -1,9 +1,11 @@
 import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
-import { set } from 'lodash';
+import { add, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import '../App.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
+import EditItems from './EditItems';
 
 export default function SingleInvoice(props) {
 	const {
@@ -20,6 +22,7 @@ export default function SingleInvoice(props) {
 		'client-postcode': clientPostcode,
 		'client-street': clientStreet,
 		items,
+		invoiceID,
 	} = props;
 
 	const [userInfo, setUserInfo] = useState('');
@@ -29,6 +32,10 @@ export default function SingleInvoice(props) {
 	const [hightlight, setHighlight] = useState('highlight-off');
 	const [confirmationState, setConfirmatinoState] = useState('Delete');
 	const [cancelState, setCancelState] = useState('cancel-closed');
+	const [editDisable, setEditDisable] = useState(false);
+	const [formData, setFormData] = useState({ fsada: 30 });
+	const [editButtonState, setEditButtonState] = useState({ color: 'edit-invoice', text: 'Edit' });
+	// const [totalState, setTotalState] = useState(item.total)
 
 	const { currentUser } = useAuth();
 
@@ -107,6 +114,34 @@ export default function SingleInvoice(props) {
 		}
 	};
 
+	const getItemTotal = (price, quantity) => {
+		return `${price * quantity}`;
+	};
+
+	const editToggle = () => {
+		if (!editDisable) {
+			setEditDisable(true);
+			setEditButtonState({ color: 'edit-invoice', text: 'Edit' });
+		} else {
+			setEditDisable(false);
+			setEditButtonState({ color: 'save-edit', text: 'Save' });
+		}
+	};
+
+	// const foo = thisTotal();
+
+	// console.log(foo);
+	// console.clear();
+
+	const addInfoToForm = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const itemsWithKeys = items.map((item, index) => {
+		let uniqueID = parseInt(index);
+		return Object.assign(item, { id: uniqueID });
+	});
+
 	useEffect(() => {
 		getCurrentUserInfo();
 	}, []);
@@ -117,7 +152,7 @@ export default function SingleInvoice(props) {
 		<div className='single-invoice'>
 			<div onClick={(e) => showMore(e)} className={`${hightlight} invoice-container`}>
 				<div className='name-and-id'>
-					<h3 className='id'>#{id.slice(0, 5)}</h3>
+					<h3 className='id'>#{invoiceID}</h3>
 					<h2 className='name'>{client}</h2>
 				</div>
 				<div className='due-and-status'>
@@ -125,11 +160,7 @@ export default function SingleInvoice(props) {
 						<h2 className='due'>Due {date}</h2>
 						<h1 className='total'>£ {parseFloat(total).toFixed(2)}</h1>
 					</div>
-					<div
-						onClick={(e) => statusToggle(e)}
-						// style={{ background: '#da6d6d', color: '#fbeeee' }}
-						className={`status-container ${currentStatus}`}
-					>
+					<div onClick={(e) => statusToggle(e)} className={`status-container ${currentStatus}`}>
 						<div className='dot'>•</div>
 						<h4 className='status'>{status}</h4>
 					</div>
@@ -139,8 +170,16 @@ export default function SingleInvoice(props) {
 				<div className='full-info-container'>
 					<div className='full-info-title-container'>
 						<div className='description-creation'>
-							<h1 className='full-info-title'>{jobDescription}</h1>
-							{/* <h2> */}
+							<input
+								type='text'
+								disabled={editDisable}
+								name='job-description'
+								className='full-info-item edit-job-description'
+								onChange={(e) => addInfoToForm(e)}
+								defaultValue={jobDescription}
+							/>
+							<br />
+							{/* <h1 className='full-info-title'>{jobDescription}</h1> */}
 							From:
 							<br />
 							{createdAt.toDate().toLocaleString('en-GB', {
@@ -148,7 +187,6 @@ export default function SingleInvoice(props) {
 								day: 'numeric',
 								year: 'numeric',
 							})}{' '}
-							{/* </h2> */}
 							<h2>(Expected within: {due} days)</h2>
 						</div>
 						<div className='client-address-info'>
@@ -160,30 +198,21 @@ export default function SingleInvoice(props) {
 					</div>
 					<div className='full-info-items'>
 						<div className='full-info-single-item'>
-							<h2 className='full-info-item-name'>Item Name</h2>
+							<h2 className='full-info-item edit-name'>Item Name</h2>
 							<h2>Qty</h2>
 							<h2>Price</h2>
 							<h2>Total</h2>
 						</div>
-						{items.map((item) => {
-							return (
-								<div className='full-info-single-item'>
-									<h4 className='full-info-item-name'>{item.name}</h4>
-									<h4>{item.quantity}</h4>
-									<h4>£{item.price}</h4>
-									<h4>£{item.total}</h4>
-								</div>
-							);
+						{itemsWithKeys.map((item) => {
+							return <EditItems key={item.id} {...item} editDisable={editDisable} />;
 						})}
 					</div>
 				</div>
 				<div className='full-info-footer'>
 					<div className='full-info-buttons-container'>
-						<div className='full-info-btns edit-invoice'>Edit</div>
-						{/* <div onClick={() => confirmDelete()} className='full-info-btns delete-invoice'>
-							{deleteConfirmation}
-						</div> */}
-						{/* {deleteConfirmation} */}
+						<div onClick={() => editToggle()} className={`full-info-btns ${editButtonState.color}`}>
+							{editButtonState.text}
+						</div>
 						<div className='confirmation'>
 							<div className={`no ${cancelState}`}>
 								<div
@@ -208,9 +237,9 @@ export default function SingleInvoice(props) {
 							</div>
 						</div>
 					</div>
-					<h1 className='full-info-total'>
-						<h2>Amount Due</h2> £{total.toFixed(2)}
-					</h1>
+					<div className='full-info-total'>
+						<h2>Amount Due</h2> <h1>£{total.toFixed(2)}</h1>
+					</div>
 				</div>
 			</div>
 		</div>

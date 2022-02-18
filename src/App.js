@@ -24,13 +24,6 @@ function App() {
 			<Router>
 				<AuthProvider>
 					<Routes>
-						{/* {userLocal ? (
-							<Route path='/' element={<Dashboard />} />
-						) : (
-							<Route exact path='/' element={<PrivateRoute />}>
-								<Route path='/' element={<Dashboard />} />
-							</Route>
-						)} */}
 						<Route exact path='/' element={<PrivateRoute />}>
 							<Route path='/' element={<Dashboard />} />
 						</Route>

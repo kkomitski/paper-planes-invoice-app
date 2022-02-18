@@ -159,6 +159,7 @@ export function UpdateProfile({ activeComponent, setActiveComponent }) {
 		}
 	};
 
+	// useEffect(() => getCurrentUserInfo(), [progress]);
 	useEffect(() => getCurrentUserInfo(), [progress, userInfo.logo]);
 
 	return (

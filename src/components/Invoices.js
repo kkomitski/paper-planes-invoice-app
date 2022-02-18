@@ -7,10 +7,10 @@ import { collection, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 
 import SingleInvoice from './SingleInvoice';
 
-export default function Invoices() {
+export default function Invoices({ overlayState, setOverlayState }) {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [invoices, setInvoices] = useState([]);
+	const [currentInvoices, setInvoices] = useState([]);
 
 	const { currentUser } = useAuth();
 
@@ -19,18 +19,21 @@ export default function Invoices() {
 	const getInvoices = () => {
 		setLoading(true);
 		onSnapshot(invoicesRef, (snapshot) => {
-			const ref = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+			const invoices = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+			// const invoices = snapshot.docs.map((doc) => console.log(doc.data().id));
+
+			// console.log(invoices);
 
 			// If not paid and overdue, change status to Overdue
-			ref.map((ref) => {
-				const overdueDate = new Date(ref.createdAt.toDate());
-				overdueDate.setDate(overdueDate.getDate() + ref.due);
+			invoices.map((invoice) => {
+				const overdueDate = new Date(invoice.createdAt.toDate());
+				overdueDate.setDate(overdueDate.getDate() + invoice.due);
 				const currentDate = Date.now();
 
-				if (ref.status !== 'Draft') {
-					if (ref.status !== 'Paid') {
+				if (invoice.status !== 'Draft') {
+					if (invoice.status !== 'Paid') {
 						if (currentDate > overdueDate) {
-							const docRef = doc(db, 'users', currentUser.email, 'Invoices', ref.id);
+							const docRef = doc(db, 'users', currentUser.email, 'Invoices', invoice.id);
 							updateDoc(docRef, {
 								status: 'Overdue',
 							});
@@ -38,12 +41,16 @@ export default function Invoices() {
 					}
 				}
 			});
-			setInvoices(ref);
+
+			setInvoices(invoices);
 			setLoading(false);
 		});
 	};
 
+	// console.log('run');
+
 	useEffect(() => getInvoices(), []);
+
 	return (
 		<section className='main-section'>
 			<article className='main-section__container'>
@@ -52,7 +59,8 @@ export default function Invoices() {
 					<h2 className='filter'>Filter</h2>
 				</div>
 				{/* {loading === true ? console.log('Loading invoices..') : console.log('Done.')} */}
-				{invoices.map((invoice) => {
+				{/* {console.log('run')} */}
+				{currentInvoices.map((invoice) => {
 					return <SingleInvoice key={invoice.id} {...invoice} />;
 				})}
 			</article>

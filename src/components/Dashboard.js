@@ -23,16 +23,6 @@ export function Dashboard() {
 				<Invoices name='invoices' />
 				<UpdateProfile setActiveComponent={setActiveComponent} name='update-profile' />
 			</SwitchComponents>
-			{/* {page} */}
-			{/* <br />
-			<button>
-				<Link to='/update-profile'>update profile</Link>
-			</button>
-			<br />
-			<br />
-			<button type='link' style={{ position: 'absolute' }} className='btn' onClick={handleLogout}>
-				Log Out
-			</button> */}
 		</article>
 	);
 }
