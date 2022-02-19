@@ -16,7 +16,7 @@ import { PrivateRoute } from './components/Authentication/PrivateRoute';
 import { ForgotPassword } from './components/Authentication/ForgotPassword';
 
 function App() {
-	const userLocal = JSON.parse(localStorage.getItem('isSigned'));
+	// const userLocal = JSON.parse(localStorage.getItem('isSigned'));
 
 	return (
 		// <main className='main'>

@@ -7,7 +7,10 @@ import { collection, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 
 import SingleInvoice from './SingleInvoice';
 
-export default function Invoices({ overlayState, setOverlayState }) {
+import { clearItems } from '../features/item';
+import { useDispatch } from 'react-redux';
+
+export default function Invoices() {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [currentInvoices, setInvoices] = useState([]);
@@ -47,7 +50,13 @@ export default function Invoices({ overlayState, setOverlayState }) {
 		});
 	};
 
-	// console.log('run');
+	const dispatch = useDispatch();
+	const filter = (item) => {
+		dispatch(clearItems({ item }));
+	};
+
+	// currentInvoices.forEach((invoice) => console.log(invoice.items));
+	// console.log(currentInvoices.forEach);
 
 	useEffect(() => getInvoices(), []);
 
@@ -56,7 +65,9 @@ export default function Invoices({ overlayState, setOverlayState }) {
 			<article className='main-section__container'>
 				<div className='title-container'>
 					<h1 className='page-title'>Invoices</h1>
-					<h2 className='filter'>Filter</h2>
+					<h2 onClick={() => filter({ foo: 2 })} className='filter'>
+						Filter
+					</h2>
 				</div>
 				{/* {loading === true ? console.log('Loading invoices..') : console.log('Done.')} */}
 				{/* {console.log('run')} */}

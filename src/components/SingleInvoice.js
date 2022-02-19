@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { add, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
@@ -6,6 +6,9 @@ import '../App.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
 import EditItems from './EditItems';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { clearItems } from '../features/item';
 
 export default function SingleInvoice(props) {
 	const {
@@ -32,12 +35,15 @@ export default function SingleInvoice(props) {
 	const [hightlight, setHighlight] = useState('highlight-off');
 	const [confirmationState, setConfirmatinoState] = useState('Delete');
 	const [cancelState, setCancelState] = useState('cancel-closed');
-	const [editDisable, setEditDisable] = useState(false);
-	const [formData, setFormData] = useState({ fsada: 30 });
+	const [editDisable, setEditDisable] = useState(true);
+	const [formData, setFormData] = useState({});
 	const [editButtonState, setEditButtonState] = useState({ color: 'edit-invoice', text: 'Edit' });
-	// const [totalState, setTotalState] = useState(item.total)
+	const [currentTotal, setCurrentTotal] = useState(parseFloat(total).toFixed(2));
 
 	const { currentUser } = useAuth();
+
+	const itemsStore = useSelector((state) => state.item.items);
+	const dispatch = useDispatch();
 
 	const getDate = () => {
 		const creationDate = new Date(createdAt.toDate());
@@ -67,6 +73,7 @@ export default function SingleInvoice(props) {
 			default:
 				setStatus('paid');
 		}
+		getTotal();
 	};
 
 	const getCurrentUserInfo = () => {
@@ -114,26 +121,43 @@ export default function SingleInvoice(props) {
 		}
 	};
 
-	const getItemTotal = (price, quantity) => {
-		return `${price * quantity}`;
-	};
+	// console.log(itemsStore);
 
-	const editToggle = () => {
+	const editToggle = async () => {
 		if (!editDisable) {
 			setEditDisable(true);
 			setEditButtonState({ color: 'edit-invoice', text: 'Edit' });
+			const valuesOnly = Object.keys(itemsStore[`invoice-${invoiceID}`]).map(
+				(val) => itemsStore[`invoice-${invoiceID}`][val]
+			);
+			await setDoc(
+				doc(db, 'users', currentUser.email, 'Invoices', `invoice-${invoiceID}`),
+				{ ...formData, items: valuesOnly },
+				{ merge: true }
+			);
+			// dispatch(clearItems())
+			console.log(valuesOnly);
 		} else {
 			setEditDisable(false);
 			setEditButtonState({ color: 'save-edit', text: 'Save' });
 		}
 	};
 
-	// const foo = thisTotal();
-
-	// console.log(foo);
-	// console.clear();
+	const getTotal = () => {
+		if (itemsStore) {
+			const foo = Object.values({ ...itemsStore[`invoice-${invoiceID}`] }).reduce(
+				(t, { total }) => t + total,
+				0
+			);
+			`${foo}`.match(/[+-]?\d+(\.\d+)?/g).map(function (v) {
+				return parseFloat(v);
+			});
+			setCurrentTotal(foo.toFixed(2));
+		}
+	};
 
 	const addInfoToForm = (e) => {
+		setCurrentTotal(getTotal());
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
@@ -146,7 +170,7 @@ export default function SingleInvoice(props) {
 		getCurrentUserInfo();
 	}, []);
 
-	useEffect(() => getStatus(), [status]);
+	useEffect(() => getStatus(), [status, itemsStore]);
 
 	return (
 		<div className='single-invoice'>
@@ -170,30 +194,78 @@ export default function SingleInvoice(props) {
 				<div className='full-info-container'>
 					<div className='full-info-title-container'>
 						<div className='description-creation'>
-							<input
+							<textarea
+								// rows={1}
 								type='text'
 								disabled={editDisable}
 								name='job-description'
 								className='full-info-item edit-job-description'
 								onChange={(e) => addInfoToForm(e)}
 								defaultValue={jobDescription}
+								placeholder='Job Description'
 							/>
 							<br />
-							{/* <h1 className='full-info-title'>{jobDescription}</h1> */}
-							From:
-							<br />
-							{createdAt.toDate().toLocaleString('en-GB', {
-								month: 'long',
-								day: 'numeric',
-								year: 'numeric',
-							})}{' '}
-							<h2>(Expected within: {due} days)</h2>
+							<div className='edit-sent-date'>
+								{' '}
+								{createdAt.toDate().toLocaleString('en-GB', {
+									month: 'long',
+									day: 'numeric',
+									year: 'numeric',
+								})}
+							</div>
+							<div className='edit-expected'>(Expected within: {due} days)</div>
 						</div>
 						<div className='client-address-info'>
-							<h2>{clientStreet}</h2>
-							<h2>{clientCity}</h2>
-							<h2>{clientPostcode}</h2>
-							<h2>{clientCountry}</h2>
+							<textarea
+								rows={1}
+								type='text'
+								className='full-info-item edit-client'
+								name='client'
+								onChange={(e) => addInfoToForm(e)}
+								disabled={editDisable}
+								defaultValue={client}
+								placeholder='Client'
+							/>
+							<textarea
+								rows={1}
+								type='text'
+								className='full-info-item edit-client-address'
+								name='client-street'
+								onChange={(e) => addInfoToForm(e)}
+								disabled={editDisable}
+								defaultValue={clientStreet}
+								placeholder='Street'
+							/>
+							<textarea
+								rows={1}
+								type='text'
+								className='full-info-item edit-client-address'
+								name='client-city'
+								onChange={(e) => addInfoToForm(e)}
+								disabled={editDisable}
+								defaultValue={clientCity}
+								placeholder='City'
+							/>
+							<textarea
+								rows={1}
+								type='text'
+								className='full-info-item edit-client-address'
+								name='client-postcode'
+								onChange={(e) => addInfoToForm(e)}
+								disabled={editDisable}
+								defaultValue={clientPostcode}
+								placeholder='Postcode'
+							/>
+							<textarea
+								rows={1}
+								type='text'
+								className='full-info-item edit-client-address'
+								name='client-country'
+								onChange={(e) => addInfoToForm(e)}
+								disabled={editDisable}
+								defaultValue={clientCountry}
+								placeholder='Country'
+							/>
 						</div>
 					</div>
 					<div className='full-info-items'>
@@ -204,7 +276,7 @@ export default function SingleInvoice(props) {
 							<h2>Total</h2>
 						</div>
 						{itemsWithKeys.map((item) => {
-							return <EditItems key={item.id} {...item} editDisable={editDisable} />;
+							return <EditItems key={item.id} {...item} invoiceID={id} editDisable={editDisable} />;
 						})}
 					</div>
 				</div>
@@ -238,7 +310,7 @@ export default function SingleInvoice(props) {
 						</div>
 					</div>
 					<div className='full-info-total'>
-						<h2>Amount Due</h2> <h1>£{total.toFixed(2)}</h1>
+						<h2>Amount Due</h2> <h1>£{currentTotal}</h1>
 					</div>
 				</div>
 			</div>
