@@ -45,24 +45,38 @@ Variables
 	--icons: #8282a5;
 	--delete: #f25c5c;
 	--font: 'Jost', sans-serif;
-	--paid-text: var(--dark-paid-text);
+	--paid-text: var(--light-paid-text);
+	--paid-bg: var(--light-paid-bg);
+	--pending-text: var(--light-pending-text);
+	--pending-bg: var(--light-pending-bg);
+	--overdue-text: var(--light-overdue-text);
+	--overdue-bg: var(--light-overdue-bg);
+	--draft-text: var(--light-draft-text);
+	--draft-bg: var(--light-draft-bg);
+	/* --paid-text: var(--dark-paid-text);
 	--paid-bg: var(--dark-paid-bg);
 	--pending-text: var(--dark-pending-text);
 	--pending-bg: var(--dark-pending-bg);
 	--overdue-text: var(--dark-overdue-text);
 	--overdue-bg: var(--dark-overdue-bg);
 	--draft-text: var(--dark-draft-text);
-	--draft-bg: var(--dark-draft-bg);
+	--draft-bg: var(--dark-draft-bg); */
 	--transition: all 0.3s linear;
 	--max-width: 1170px;
 	--radius-1: 0.25rem;
 	--radius-2: 0.5rem;
-	--primary: var(--dark-primary);
+	--primary: var(--light-primary);
+	--secondary: var(--light-secondary);
+	--element: var(--light-element);
+	--text-primary: var(--light-text-primary);
+	--text-secondary: var(--text-secondary);
+	--box-shadow: var(--light-box-shadow);
+	/* --primary: var(--dark-primary);
 	--secondary: var(--dark-secondary);
 	--element: var(--dark-element);
 	--text-primary: var(--dark-text-primary);
 	--text-secondary: var(--text-secondary);
-	--box-shadow: var(--dark-box-shadow);
+	--box-shadow: var(--dark-box-shadow); */
 	--xxs-font: 0.25rem;
 	--xs-font: 0.5rem;
 	--s-font: 0.75rem;
@@ -848,6 +862,7 @@ a {
 	justify-content: center;
 	max-height: 55px;
 	border-radius: var(--radius-2);
+	cursor: pointer;
 }
 
 .dot {
@@ -1400,11 +1415,13 @@ a {
 	}
 
 	.add-items:hover {
+		color: var(--dark-text-primary);
 		background-color: var(--icons);
 	}
 
 	.save:hover {
 		background-color: var(--dark-paid-text);
+		color: var(--dark-text-primary);
 	}
 
 	.item-attribute {

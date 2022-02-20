@@ -12,6 +12,7 @@ import {
 	uploadBytes,
 	uploadBytesResumable,
 } from 'firebase/storage';
+import { useSelector } from 'react-redux';
 
 export function UpdateProfile({ activeComponent, setActiveComponent }) {
 	const emailRef = useRef();
@@ -43,6 +44,9 @@ export function UpdateProfile({ activeComponent, setActiveComponent }) {
 	const storage = getStorage();
 
 	const getCurrentUserInfo = () => {
+		// setUserInfo(infoStore);
+		// console.log(infoStore);
+
 		const userInfoRef = doc(db, 'users', currentUser.email);
 		onSnapshot(userInfoRef, (snapshot) => {
 			const currentUserInfo = snapshot.data();

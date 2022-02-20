@@ -9,6 +9,8 @@ import SingleInvoice from './SingleInvoice';
 
 import { clearItems } from '../features/item';
 import { useDispatch } from 'react-redux';
+import { setInfo } from '../features/userinfo';
+import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
 export default function Invoices() {
 	const [error, setError] = useState('');
@@ -16,16 +18,17 @@ export default function Invoices() {
 	const [currentInvoices, setInvoices] = useState([]);
 
 	const { currentUser } = useAuth();
+	const dispatch = useDispatch();
 
 	const invoicesRef = collection(db, 'users', currentUser.email, 'Invoices');
+	const customizedMiddleware = getDefaultMiddleware({
+		serializableCheck: false,
+	});
 
 	const getInvoices = () => {
 		setLoading(true);
 		onSnapshot(invoicesRef, (snapshot) => {
 			const invoices = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-			// const invoices = snapshot.docs.map((doc) => console.log(doc.data().id));
-
-			// console.log(invoices);
 
 			// If not paid and overdue, change status to Overdue
 			invoices.map((invoice) => {
@@ -45,12 +48,21 @@ export default function Invoices() {
 				}
 			});
 
+			const userInfoRef = doc(db, 'users', currentUser.email);
+			onSnapshot(userInfoRef, (snapshot) => {
+				const currentUserInfo = snapshot.data();
+				try {
+					dispatch(setInfo({ ...currentUserInfo, createdAt: null }));
+				} catch (e) {
+					console.log(e);
+				}
+			});
+
 			setInvoices(invoices);
 			setLoading(false);
 		});
 	};
 
-	const dispatch = useDispatch();
 	const filter = (item) => {
 		dispatch(clearItems({ item }));
 	};

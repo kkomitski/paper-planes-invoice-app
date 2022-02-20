@@ -53,10 +53,10 @@ export function AuthProvider({ children }) {
 			if (isMounted) {
 				if (user) {
 					setCurrentUser(user);
-					localStorage.setItem('isSigned', true);
+					// localStorage.setItem('isSigned', true);
 				} else {
 					console.log('user-signed out');
-					localStorage.setItem('isSigned', false);
+					// localStorage.setItem('isSigned', false);
 				}
 			}
 		});

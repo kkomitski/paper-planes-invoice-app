@@ -2,22 +2,12 @@ import React, { useRef, useState } from 'react';
 import plus from '../../assets/plus-circle-solid.svg';
 import '../../App.css';
 import Item from './Item';
-import {
-	addDoc,
-	collection,
-	doc,
-	serverTimestamp,
-	setDoc,
-	updateDoc,
-	increment,
-	decrement,
-	getDoc,
-} from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc, updateDoc, increment, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase-config';
 import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
 
-export default function Overlay() {
+export default function Overlay(props) {
 	const [overlayContainerState, setOverlayContainerState] = useState('closed');
 	const [field, setField] = useState('info');
 	const [addState, setAddState] = useState('add');
@@ -69,6 +59,11 @@ export default function Overlay() {
 				day: 'numeric',
 				year: 'numeric',
 			});
+			senderCompany.current.value = props.infoStore['company-name'];
+			senderStreet.current.value = props.infoStore['street'];
+			senderCity.current.value = props.infoStore['city'];
+			senderPostcode.current.value = props.infoStore['postcode'];
+			senderCountry.current.value = props.infoStore['country'];
 		} else {
 			setOverlayContainerState('closed');
 			setItems([]);
@@ -223,29 +218,6 @@ export default function Overlay() {
 			console.log(e);
 		}
 	};
-	// const saveInvoice = async () => {
-	// 	if (formData.client && formData.total) {
-	// 		await addDoc(collection(db, 'users', currentUser.email, 'Invoices'), {
-	// 			...formData,
-	// 		});
-	// 		// Reset
-	// 		setOverlayContainerState('closed');
-	// 		setItems([{ id: 0 }]);
-	// 		setTimeout(() => setField('info'), 500);
-	// 		setItems([]);
-	// 		clientClient.current.setAttribute('placeholder', '');
-	// 		setAddState('add');
-	// 		setFormData(blankForm);
-	// 		clearAllInputs();
-	// 	} else if (formData.client && !formData.total) {
-	// 		setAddState('add-error');
-	// 	} else if (!formData.client && formData.total) {
-	// 		clientClient.current.setAttribute('placeholder', 'Please add client');
-	// 	} else {
-	// 		clientClient.current.setAttribute('placeholder', 'Please add client');
-	// 		setAddState('add-error');
-	// 	}
-	// };
 
 	return (
 		<section className={`overlay-container ${overlayContainerState}`}>
@@ -300,7 +272,7 @@ export default function Overlay() {
 					{/* INFORMATION */}
 					<fieldset style={{ outline: 'none', border: 'none' }} className='new-invoice'>
 						<form className='new-invoice-input-form'>
-							{/* SENDER DETAILS
+							{/* SENDER DETAILS */}
 							<div className='invoice-from'>
 								<h4 className='input-title'>Invoice From:</h4>
 								<div className='company'>
@@ -323,7 +295,7 @@ export default function Overlay() {
 									<h2 className='item-attribute'>Country</h2>
 									<input ref={senderCountry} className='new-invoice-input' type='text' />
 								</div>
-							</div> */}
+							</div>
 							{/* CLIENT DETAILS */}
 							<h4 className='input-title'>Invoice To:</h4>
 							<div className='client'>

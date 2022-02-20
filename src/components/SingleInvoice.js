@@ -7,8 +7,8 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
 import EditItems from './EditItems';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { clearItems } from '../features/item';
+// import { useDispatch } from 'react-redux';
+// import { clearItems } from '../features/item';
 
 export default function SingleInvoice(props) {
 	const {
@@ -43,7 +43,7 @@ export default function SingleInvoice(props) {
 	const { currentUser } = useAuth();
 
 	const itemsStore = useSelector((state) => state.item.items);
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 
 	const statusRef = useRef();
 
@@ -77,7 +77,7 @@ export default function SingleInvoice(props) {
 		}
 		getTotal();
 		statusRef.current.innerHTML = status;
-		console.log(statusRef.current.innerHTML);
+		// console.log(statusRef.current.innerHTML);
 	};
 
 	const getCurrentUserInfo = () => {

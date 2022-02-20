@@ -40,7 +40,7 @@ const lightdraftText = getComputedStyle(root).getPropertyValue('--light-draft-te
 const lightdraftBg = getComputedStyle(root).getPropertyValue('--light-draft-bg');
 
 export function Mode() {
-	const [mode, setMode] = useState(dark);
+	const [mode, setMode] = useState(light);
 
 	function handleMode() {
 		// console.log(lightpaidText);

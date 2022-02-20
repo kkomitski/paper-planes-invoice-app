@@ -1,18 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-	addDoc,
-	collection,
-	getDoc,
-	doc,
-	document,
-	addCollection,
-	documentId,
-	data,
-	serverTimestamp,
-	setDoc,
-} from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase-config';
 import plane from '../../assets/maxresdefault.png';
 
@@ -45,9 +34,11 @@ export default function SignUp() {
 					createdAt: serverTimestamp(),
 					'company-name': 'Company Name',
 					invoiceIDsCounter: 0,
-					// invoices: addDoc(collection(db, 'users', credentials.user.email, 'Invoices')),
+					'bussines-number': '',
+					postcode: '',
+					street: '',
+					country: '',
 				});
-				// addDoc(collection(db, 'users', credentials.user.email, 'Invoices'));
 			});
 
 			navigate('/');
@@ -62,7 +53,7 @@ export default function SignUp() {
 	return (
 		<article className='field-container'>
 			<fieldset className='field'>
-				<form className='form' onSubmit={handleSubmit}>
+				<form className='form' onSubmit={(e) => handleSubmit(e)}>
 					<legend className='auth-title'>Sign Up</legend>
 					<br />
 					<div className='error'>{error}</div>
