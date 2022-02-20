@@ -588,8 +588,8 @@ a {
 }
 
 .highlight-on > .due-and-status > .draft {
-	background-color: var(--draft-text);
-	color: var(--draft-bg);
+	background-color: var(--secondary);
+	color: var(--highlight);
 }
 
 .full-info {
@@ -1360,11 +1360,15 @@ a {
 }
 
 .save {
-	grid-column: auto / span 3;
+	grid-column: auto / span 2;
+}
+
+.save-draft {
+	grid-column: auto / span 2;
 }
 
 .download-pdf {
-	grid-column: auto / span 3;
+	grid-column: auto / span 2;
 }
 
 .add {

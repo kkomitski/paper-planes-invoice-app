@@ -39,6 +39,7 @@ export default function SingleInvoice(props) {
 	const [formData, setFormData] = useState({});
 	const [editButtonState, setEditButtonState] = useState({ color: 'edit-invoice', text: 'Edit' });
 	const [currentTotal, setCurrentTotal] = useState(parseFloat(total).toFixed(2));
+	const [statusConfirmation, setStatusConfirmation] = useState(status);
 
 	const { currentUser } = useAuth();
 
@@ -121,8 +122,6 @@ export default function SingleInvoice(props) {
 		}
 	};
 
-	// console.log(itemsStore);
-
 	const editToggle = async () => {
 		if (!editDisable) {
 			setEditDisable(true);
@@ -161,6 +160,8 @@ export default function SingleInvoice(props) {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const statusConfirm = () => {};
+
 	const itemsWithKeys = items.map((item, index) => {
 		let uniqueID = parseInt(index);
 		return Object.assign(item, { id: uniqueID });
@@ -186,7 +187,9 @@ export default function SingleInvoice(props) {
 					</div>
 					<div onClick={(e) => statusToggle(e)} className={`status-container ${currentStatus}`}>
 						<div className='dot'>•</div>
-						<h4 className='status'>{status}</h4>
+						<div onClick={(e) => statusConfirm()} className='status-confirmation'>
+							<h4 className='status'>{status}</h4>
+						</div>
 					</div>
 				</div>
 			</div>

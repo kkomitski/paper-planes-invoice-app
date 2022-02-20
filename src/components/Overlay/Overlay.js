@@ -171,12 +171,10 @@ export default function Overlay() {
 
 	let newInvoiceID = 0;
 	const invoicesIDRef = doc(db, 'users', currentUser.email);
-	const downloadPdf = async () => {
+	const generateInvoiceID = async () => {
 		const invoicesIDs = await getDoc(invoicesIDRef);
-		// const foo = invoicesIDs.data().invoiceIDsCounter + 1;
 		const foo = invoicesIDs.data().invoiceIDsCounter + 1;
 		newInvoiceID = foo;
-		console.log(newInvoiceID);
 	};
 
 	const clearAllInputs = () => {
@@ -186,17 +184,23 @@ export default function Overlay() {
 		});
 	};
 
-	const saveInvoice = async () => {
+	const saveInvoice = async (e) => {
+		console.log(e.target.innerHTML);
 		try {
 			if (formData.client && formData.total) {
-				// const newInvoiceID = await downloadPdf();
-				await downloadPdf();
-
-				// console.log(newInvoiceID.toData());
-				await setDoc(doc(db, 'users', currentUser.email, 'Invoices', `invoice-${newInvoiceID}`), {
-					...formData,
-					invoiceID: newInvoiceID,
-				});
+				await generateInvoiceID();
+				if (e.target.innerHTML === 'Save') {
+					await setDoc(doc(db, 'users', currentUser.email, 'Invoices', `invoice-${newInvoiceID}`), {
+						...formData,
+						invoiceID: newInvoiceID,
+					});
+				} else {
+					await setDoc(doc(db, 'users', currentUser.email, 'Invoices', `invoice-${newInvoiceID}`), {
+						...formData,
+						invoiceID: newInvoiceID,
+						status: 'Draft',
+					});
+				}
 				updateDoc(invoicesIDRef, { invoiceIDsCounter: increment(1) });
 				// Reset
 				setOverlayContainerState('closed');
@@ -242,34 +246,6 @@ export default function Overlay() {
 	// 		setAddState('add-error');
 	// 	}
 	// };
-
-	const updateInvoice = async (id) => {
-		if (formData.client && formData.total) {
-			await setDoc(
-				collection(db, 'users', currentUser.email, 'Invoices', `invoice-${id}`),
-				{
-					...formData,
-				},
-				{ merge: true }
-			);
-			// Reset
-			setOverlayContainerState('closed');
-			setItems([{ id: 0 }]);
-			setTimeout(() => setField('info'), 500);
-			setItems([]);
-			clientClient.current.setAttribute('placeholder', '');
-			setAddState('add');
-			setFormData(blankForm);
-			clearAllInputs();
-		} else if (formData.client && !formData.total) {
-			setAddState('add-error');
-		} else if (!formData.client && formData.total) {
-			clientClient.current.setAttribute('placeholder', 'Please add client');
-		} else {
-			clientClient.current.setAttribute('placeholder', 'Please add client');
-			setAddState('add-error');
-		}
-	};
 
 	return (
 		<section className={`overlay-container ${overlayContainerState}`}>
@@ -324,7 +300,7 @@ export default function Overlay() {
 					{/* INFORMATION */}
 					<fieldset style={{ outline: 'none', border: 'none' }} className='new-invoice'>
 						<form className='new-invoice-input-form'>
-							{/* SENDER DETAILS */}
+							{/* SENDER DETAILS
 							<div className='invoice-from'>
 								<h4 className='input-title'>Invoice From:</h4>
 								<div className='company'>
@@ -347,7 +323,7 @@ export default function Overlay() {
 									<h2 className='item-attribute'>Country</h2>
 									<input ref={senderCountry} className='new-invoice-input' type='text' />
 								</div>
-							</div>
+							</div> */}
 							{/* CLIENT DETAILS */}
 							<h4 className='input-title'>Invoice To:</h4>
 							<div className='client'>
@@ -468,12 +444,13 @@ export default function Overlay() {
 							<div onClick={() => toggleInputField()} className={`add-items ${addState}`}>
 								+ Add Items
 							</div>
-							<div onClick={saveInvoice} className='add-items save'>
+							<div onClick={(e) => saveInvoice(e)} className='add-items save'>
 								Save
 							</div>
-							<div onClick={downloadPdf} className='add-items download-pdf'>
-								Download PDF
+							<div onClick={(e) => saveInvoice(e)} className='add-items save-draft'>
+								Save Draft
 							</div>
+							<div className='add-items download-pdf'>Download PDF</div>
 						</form>
 					</fieldset>
 				</div>
