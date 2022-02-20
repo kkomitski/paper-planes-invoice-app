@@ -39,12 +39,13 @@ export default function SingleInvoice(props) {
 	const [formData, setFormData] = useState({});
 	const [editButtonState, setEditButtonState] = useState({ color: 'edit-invoice', text: 'Edit' });
 	const [currentTotal, setCurrentTotal] = useState(parseFloat(total).toFixed(2));
-	const [statusConfirmation, setStatusConfirmation] = useState(status);
 
 	const { currentUser } = useAuth();
 
 	const itemsStore = useSelector((state) => state.item.items);
 	const dispatch = useDispatch();
+
+	const statusRef = useRef();
 
 	const getDate = () => {
 		const creationDate = new Date(createdAt.toDate());
@@ -75,6 +76,8 @@ export default function SingleInvoice(props) {
 				setStatus('paid');
 		}
 		getTotal();
+		statusRef.current.innerHTML = status;
+		console.log(statusRef.current.innerHTML);
 	};
 
 	const getCurrentUserInfo = () => {
@@ -94,7 +97,7 @@ export default function SingleInvoice(props) {
 				{ status: 'Paid' },
 				{ merge: true }
 			);
-		} else if (status === 'Paid') {
+		} else if (status === 'Paid' || status === 'Draft') {
 			setDoc(
 				doc(db, 'users', currentUser.email, 'Invoices', id),
 				{ status: 'Pending' },
@@ -188,7 +191,12 @@ export default function SingleInvoice(props) {
 					<div onClick={(e) => statusToggle(e)} className={`status-container ${currentStatus}`}>
 						<div className='dot'>•</div>
 						<div onClick={(e) => statusConfirm()} className='status-confirmation'>
-							<h4 className='status'>{status}</h4>
+							<h4 ref={statusRef} className='status'>
+								{status}
+							</h4>
+							{/* <h4 ref={statusRef} className='status'>
+								{status}
+							</h4> */}
 						</div>
 					</div>
 				</div>
