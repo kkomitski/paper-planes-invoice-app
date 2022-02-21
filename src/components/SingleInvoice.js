@@ -1,5 +1,4 @@
-import { collection, deleteDoc, doc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
-import { add, set } from 'lodash';
+import { deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import '../App.css';
@@ -7,8 +6,6 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
 import EditItems from './EditItems';
 import { useSelector } from 'react-redux';
-// import { useDispatch } from 'react-redux';
-// import { clearItems } from '../features/item';
 
 export default function SingleInvoice(props) {
 	const {

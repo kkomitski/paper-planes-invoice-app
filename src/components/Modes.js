@@ -43,9 +43,6 @@ export function Mode() {
 	const [mode, setMode] = useState(light);
 
 	function handleMode() {
-		// console.log(lightpaidText);
-		console.log('click');
-
 		if (mode === dark) {
 			setMode(light);
 			root.style.setProperty('--primary', lightPrimary);

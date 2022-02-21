@@ -77,6 +77,7 @@ Variables
 	--text-primary: var(--dark-text-primary);
 	--text-secondary: var(--text-secondary);
 	--box-shadow: var(--dark-box-shadow); */
+	/* --box-shadow: var(--dark-box-shadow); */
 	--xxs-font: 0.25rem;
 	--xs-font: 0.5rem;
 	--s-font: 0.75rem;
