@@ -57,8 +57,8 @@ Variables
 	--paid-bg: var(--dark-paid-bg);
 	--pending-text: var(--dark-pending-text);
 	--pending-bg: var(--dark-pending-bg);
-	--overdue-text: var(--dark-overdue-text);
 	--overdue-bg: var(--dark-overdue-bg);
+	--overdue-text: var(--dark-overdue-text);
 	--draft-text: var(--dark-draft-text);
 	--draft-bg: var(--dark-draft-bg); */
 	--transition: all 0.3s linear;
