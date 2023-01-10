@@ -12,12 +12,14 @@ import { useDispatch } from 'react-redux';
 import { setInfo } from '../features/userinfo';
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
+import { currentUser } from '../firebase-config';
+
 export default function Invoices() {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [currentInvoices, setInvoices] = useState([]);
 
-	const { currentUser } = useAuth();
+	// const { currentUser } = useAuth();
 	const dispatch = useDispatch();
 
 	const invoicesRef = collection(db, 'users', currentUser.email, 'Invoices');
@@ -67,10 +69,9 @@ export default function Invoices() {
 		dispatch(clearItems({ item }));
 	};
 
-	// currentInvoices.forEach((invoice) => console.log(invoice.items));
-	// console.log(currentInvoices.forEach);
-
-	useEffect(() => getInvoices(), []);
+	useEffect(() => {
+		getInvoices()
+	}, []);
 
 	return (
 		<section className='main-section'>
@@ -81,7 +82,7 @@ export default function Invoices() {
 						Filter
 					</h2>
 				</div>
-				{/* {loading === true ? console.log('Loading invoices..') : console.log('Done.')} */}
+				{loading === true ? "Loading invoices...." : ''}
 				{/* {console.log('run')} */}
 				{currentInvoices.map((invoice) => {
 					return <SingleInvoice key={invoice.id} {...invoice} />;

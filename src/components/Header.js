@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mode } from './Modes';
 
-import '../App.css';
+import '../css/main.css';
 import defaultPhoto from '../assets/user-solid.svg';
 
 export function Header({ activeComponent, setActiveComponent }) {

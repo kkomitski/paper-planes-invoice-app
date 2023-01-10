@@ -5,7 +5,7 @@ import { React } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Styling
-import './App.css';
+import './css/main.css';
 
 // Components
 import SignUp from './components/Authentication/SignUp';

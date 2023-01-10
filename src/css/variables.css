@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;300;500;700&display=swap');
+
+:root {
+	/* Dark theme */
+	--dark-primary: #141625;
+	--dark-secondary: #5a556c;
+	--dark-element: #1f213a;
+	--dark-text-primary: #feffff;
+	--dark-text-secondary: #9496af;
+	--dark-box-shadow: 2px 0px 5px var(--dark-secondary);
+	--dark-paid-text: #58a799;
+	--dark-paid-bg: #1e2d3a;
+	--dark-pending-text: #e89127;
+	--dark-pending-bg: #30232a;
+	--dark-overdue-text: #ee5555;
+	--dark-overdue-bg: #442525;
+	--dark-draft-text: #d1d3ea;
+	--dark-draft-bg: rgba(49, 50, 67, 0.875);
+
+	/* Light theme */
+	--light-primary: #f3f1f9;
+	--light-secondary: #cac3e6;
+	--light-element: #ffffff;
+	--light-text-primary: #3a3a3a;
+	--light-text-secondary: #c8c7cb;
+	--light-box-shadow: 2px 0px 5px var(--light-secondary);
+	--light-paid-text: #57aa8e;
+	--light-paid-bg: #e6fff8;
+	--light-pending-text: #dda658;
+	--light-pending-bg: #fff4f0;
+	--light-overdue-text: #da6d6d;
+	--light-overdue-bg: #fbeeee;
+	--light-draft-text: #9772e1;
+	--light-draft-bg: rgba(242, 237, 255, 0.95);
+
+	/* Main */
+	--highlight: #8362fe;
+	--highlight-2: #7c5df9;
+	--icons: #8282a5;
+	--delete: #f25c5c;
+	--font: 'Jost', sans-serif;
+	--paid-text: var(--light-paid-text);
+	--paid-bg: var(--light-paid-bg);
+	--pending-text: var(--light-pending-text);
+	--pending-bg: var(--light-pending-bg);
+	--overdue-text: var(--light-overdue-text);
+	--overdue-bg: var(--light-overdue-bg);
+	--draft-text: var(--light-draft-text);
+	--draft-bg: var(--light-draft-bg);
+	/* --paid-text: var(--dark-paid-text);
+	--paid-bg: var(--dark-paid-bg);
+	--pending-text: var(--dark-pending-text);
+	--pending-bg: var(--dark-pending-bg);
+	--overdue-text: var(--dark-overdue-text);
+	--overdue-bg: var(--dark-overdue-bg);
+	--draft-text: var(--dark-draft-text);
+	--draft-bg: var(--dark-draft-bg); */
+	--transition: all 0.3s linear;
+	--max-width: 1170px;
+	--radius-1: 0.25rem;
+	--radius-2: 0.5rem;
+	--primary: var(--light-primary);
+	--secondary: var(--light-secondary);
+	--element: var(--light-element);
+	--text-primary: var(--light-text-primary);
+	--text-secondary: var(--text-secondary);
+	--box-shadow: var(--light-box-shadow);
+	/* --primary: var(--dark-primary);
+	--element: var(--dark-element);
+	--text-secondary: var(--text-secondary);
+	--box-shadow: var(--dark-box-shadow); */
+	/* --box-shadow: var(--dark-box-shadow); */
+	--xxs-font: 0.25rem;
+	--xs-font: 0.5rem;
+	--s-font: 0.75rem;
+	--m-font: 1rem;
+	--l-font: 1.25rem;
+	--xl-font: 1.5rem;
+	--xxl-font: 2rem;
+}
+
+@media screen and (min-width: 568px) {
+	:root {
+		--xxs-font: 0.5rem;
+		--xs-font: 0.75rem;
+		--s-font: 1rem;
+		--m-font: 1.25rem;
+		--l-font: 1.5rem;
+		--xl-font: 2rem;
+		--xxl-font: 2.25rem;
+	}
+}
+
+*,
+::before,
+::after {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

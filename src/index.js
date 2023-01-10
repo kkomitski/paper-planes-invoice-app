@@ -5,11 +5,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import itemReducer from './features/item';
 import userInfoReducer from './features/userinfo';
+import currentUserReducer from './features/currentUser';
 
 const store = configureStore({
 	reducer: {
 		item: itemReducer,
 		userinfo: userInfoReducer,
+		currentUser: currentUserReducer,
 	},
 });
 

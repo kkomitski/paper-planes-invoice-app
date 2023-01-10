@@ -1,24 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Components
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 // Styles
-import '../../App.css';
+import '../../css/auth.css';
 import plane from '../../assets/maxresdefault.png';
 
 export function Login() {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 
-	const { login, currentUser } = useAuth();
+	const { login } = useAuth();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
 	// const [path, setPath] = useState('');
+
+	const mounted = useRef(true)
+
+	useEffect(() => {
+		return () => {
+			mounted.current = false
+		}
+	}, [])
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -29,11 +37,14 @@ export function Login() {
 			await login(emailRef.current.value, passwordRef.current.value);
 			navigate('/');
 		} catch (e) {
-			console.log(e.message);
-			setError('Failed to sign-in');
+			if(mounted.current){
+				console.log(e.message);
+				setError('Failed to sign-in');
+			}
 		}
-
-		setLoading(false);
+		if(mounted.current){
+			setLoading(false);
+		}
 	}
 
 	return (

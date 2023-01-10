@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Styles
-import '../App.css';
+import '../css/dashboard.css';
 
 // Components
 import { Header } from './Header';

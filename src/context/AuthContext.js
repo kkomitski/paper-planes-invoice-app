@@ -6,8 +6,14 @@ import {
 	sendPasswordResetEmail,
 	updateEmail,
 	updatePassword,
+	setPersistence,
+	browserSessionPersistence,
+	browserLocalPersistence
 } from 'firebase/auth';
 import { auth } from '../firebase-config';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../features/currentUser';
+import cryptoJs from 'crypto-js';
 
 const AuthContext = React.createContext();
 
@@ -21,7 +27,11 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState();
+	const [currentUser, setCurrentUser] = useState('');
+
+	// const currentUserStore = 
+	const dispatch = useDispatch();
+	const currentUserStore = useSelector((state) => state.currentUser);
 
 	function signup(email, password) {
 		return createUser(auth, email, password);
@@ -48,36 +58,23 @@ export function AuthProvider({ children }) {
 	}
 
 	useEffect(() => {
-		let isMounted = true;
+		
 		auth.onAuthStateChanged((user) => {
-			if (isMounted) {
+			// console.log("auth state changed")
+			// if (isMounted) {
 				if (user) {
-					setCurrentUser(user);
-					// localStorage.setItem('isSigned', true);
+					const cipher = cryptoJs.AES.encrypt(JSON.stringify(user), process.env.REACT_APP_CRYPT_KEY).toString()
+					window.localStorage.setItem('encuser', cipher)
+					setCurrentUser(JSON.parse(window.localStorage.user));
 				} else {
+					window.localStorage.removeItem('encuser')
 					console.log('user-signed out');
-					// localStorage.setItem('isSigned', false);
 				}
-			}
-		});
+				// }
+			});
 
-		return () => {
-			isMounted = false;
-		};
+		// return () => unsubscribe;
 	}, []);
-
-	// useEffect(() => {
-	// 	let isMounted = true;
-	// 	auth.onAuthStateChanged((user) => {
-	// 		if (isMounted) {
-	// 			setCurrentUser(user);
-	// 		}
-	// 	});
-
-	// 	return () => {
-	// 		isMounted = false;
-	// 	};
-	// }, []);
 
 	const value = { currentUser, signup, login, logout, reset, updateUserEmail, updateUserPassword };
 

@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import plus from '../../assets/plus-circle-solid.svg';
-import '../../App.css';
+import '../../css/new-invoice-screen.css';
 import Item from './Item';
 import { doc, serverTimestamp, setDoc, updateDoc, increment, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase-config';
 import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
+import { currentUser } from '../../firebase-config';
 
 export default function Overlay(props) {
 	const [overlayContainerState, setOverlayContainerState] = useState('closed');
@@ -31,7 +32,7 @@ export default function Overlay(props) {
 	const cancelBtn = useRef();
 	const overlay = useRef();
 
-	const { currentUser } = useAuth();
+	// const { currentUser } = useAuth();
 
 	// User Input fields
 	const senderCompany = useRef();

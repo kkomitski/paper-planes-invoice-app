@@ -1,11 +1,12 @@
 import { deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
-import '../App.css';
+import '../css/main.css';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase-config';
 import EditItems from './EditItems';
 import { useSelector } from 'react-redux';
+import { currentUser } from '../firebase-config';
 
 export default function SingleInvoice(props) {
 	const {
@@ -37,7 +38,7 @@ export default function SingleInvoice(props) {
 	const [editButtonState, setEditButtonState] = useState({ color: 'edit-invoice', text: 'Edit' });
 	const [currentTotal, setCurrentTotal] = useState(parseFloat(total).toFixed(2));
 
-	const { currentUser } = useAuth();
+	// const { currentUser } = useAuth();
 
 	const itemsStore = useSelector((state) => state.item.items);
 	// const dispatch = useDispatch();
@@ -171,7 +172,9 @@ export default function SingleInvoice(props) {
 		getCurrentUserInfo();
 	}, []);
 
-	useEffect(() => getStatus(), [status, itemsStore]);
+	useEffect(() => {
+		getStatus()
+	}, [status, itemsStore]);
 
 	return (
 		<div className='single-invoice'>

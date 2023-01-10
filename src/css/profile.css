@@ -1,0 +1,232 @@
+@import 'global.css';
+
+.update-info-input {
+	width: 100%;
+	margin-top: 0.4rem;
+	font-size: 0.5rem;
+	padding: 0.6rem;
+	border-radius: var(--radius-1);
+	/* background-color: var(--secondary); */
+}
+
+.profile-page-container {
+	background: var(--element);
+	border-radius: var(--radius-2);
+	padding: 1.25rem;
+	z-index: 0;
+	height: calc(100% - 70px);
+}
+
+.profile-update {
+	transform: translateY(1rem);
+	height: calc(100vh - 5px);
+}
+
+.profile-title {
+	display: none;
+	padding: none;
+}
+
+.update-profile-error {
+	text-align: start;
+	margin-top: -1.5rem;
+}
+
+.company-logo-container {
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.without-logo {
+	height: 60px;
+	width: 60px;
+	background-color: var(--draft-bg);
+}
+
+.with-logo {
+	height: 100%;
+	width: auto;
+	background: none;
+}
+
+.logo-img {
+	max-width: 100px;
+	max-height: 75px;
+	height: 100%;
+}
+
+.company-logo {
+	color: var(--draft-text);
+}
+
+input[type='file'] {
+	display: none;
+}
+
+.business-info-fieldset {
+	width: 100%;
+	height: 100%;
+	font-size: 0.875rem;
+	gap: 0.5rem;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-rows: auto;
+	align-items: center;
+	border: none;
+}
+
+.name-and-logo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	grid-column: auto / span 6;
+}
+
+.business-info-fieldset > .error {
+	text-align: center;
+	grid-column: auto / span 6;
+}
+
+.company-name {
+	border: none;
+	background-color: var(--element);
+	font-size: 1.15rem;
+	padding: 0;
+}
+.company-name:active {
+	border: none;
+}
+
+.company-name:focus {
+	border: none;
+	outline: none;
+}
+
+.company-name:-webkit-autofill,
+.company-name:-webkit-autofill:hover,
+.company-name:-webkit-autofill:focus,
+.company-name:-webkit-autofill:active {
+	border: none;
+	outline: none;
+	border-radius: 0;
+}
+
+.update-street {
+	grid-column: auto / span 3;
+}
+
+.update-city {
+	grid-column: auto / span 3;
+}
+
+.update-postcode {
+	grid-column: auto / span 3;
+}
+
+.update-country {
+	grid-column: auto / span 3;
+}
+
+.update-street {
+	grid-column: auto / span 3;
+}
+
+.update-business-number {
+	grid-column: auto / span 3;
+}
+
+.update-vat-registration {
+	grid-column: auto / span 3;
+}
+
+.update-email {
+	grid-column: auto / span 6;
+}
+
+.update-password {
+	grid-column: auto / span 3;
+}
+
+#password::placeholder {
+	color: var(--secondary);
+}
+
+.update-password-confirm {
+	grid-column: auto / span 3;
+}
+
+#password-confirm::placeholder {
+	color: var(--secondary);
+}
+
+.update-info {
+	grid-column: auto / span 3;
+	background-color: var(--draft-bg);
+}
+
+.cancel-button {
+	grid-column: auto / span 3;
+	background-color: var(--draft-bg);
+}
+
+.logout-button {
+	grid-column: auto / span 6;
+	background-color: var(--highlight);
+}
+
+@media screen and (min-width: 568px) {
+	.profile-page-container {
+		/* height: calc(100% - 150px); */
+		height: calc(100% - 100px);
+	}
+}
+
+@media screen and (min-width: 865px) {
+	.profile-page-container {
+		max-height: 800px;
+		/* margin-bottom: 3rem; */
+	}
+
+	.name-and-logo {
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	.company-logo-container {
+		order: 0;
+	}
+
+	.company-name {
+		order: 1;
+	}
+
+	.update-info-input {
+		font-size: 0.875rem;
+	}
+
+	.profile-update {
+		transform: translateY(0);
+		/* height: calc(100vh - 5px); */
+	}
+
+	.profile-title {
+		display: flex;
+	}
+
+	.update-profile-error {
+		text-align: center;
+		margin: -0.5rem;
+	}
+}
+
+@media screen and (min-width: 1175px) {
+	.update-info:hover {
+		background-color: var(--paid-text);
+	}
+
+	.cancel-button:hover {
+		background-color: var(--delete);
+	}
+}
