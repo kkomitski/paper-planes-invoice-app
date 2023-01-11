@@ -10,22 +10,16 @@ import SingleInvoice from './SingleInvoice';
 import { clearItems } from '../features/item';
 import { useDispatch } from 'react-redux';
 import { setInfo } from '../features/userinfo';
-import { getDefaultMiddleware } from '@reduxjs/toolkit';
-
-import { currentUser } from '../firebase-config';
 
 export default function Invoices() {
-	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [currentInvoices, setInvoices] = useState([]);
 
-	// const { currentUser } = useAuth();
+	const { checkUser } = useAuth();
+	const currentUser = checkUser();
 	const dispatch = useDispatch();
 
 	const invoicesRef = collection(db, 'users', currentUser.email, 'Invoices');
-	const customizedMiddleware = getDefaultMiddleware({
-		serializableCheck: false,
-	});
 
 	const getInvoices = () => {
 		setLoading(true);
@@ -33,7 +27,7 @@ export default function Invoices() {
 			const invoices = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
 			// If not paid and overdue, change status to Overdue
-			invoices.map((invoice) => {
+			invoices.forEach((invoice) => {
 				const overdueDate = new Date(invoice.createdAt.toDate());
 				overdueDate.setDate(overdueDate.getDate() + invoice.due);
 				const currentDate = Date.now();

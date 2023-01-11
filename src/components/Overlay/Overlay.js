@@ -6,7 +6,7 @@ import { doc, serverTimestamp, setDoc, updateDoc, increment, getDoc } from 'fire
 import { db } from '../../firebase-config';
 import { useAuth } from '../../context/AuthContext';
 import Calendar from 'react-calendar';
-import { currentUser } from '../../firebase-config';
+// import { persistUser } from '../../firebase-config';
 
 export default function Overlay(props) {
 	const [overlayContainerState, setOverlayContainerState] = useState('closed');
@@ -32,7 +32,8 @@ export default function Overlay(props) {
 	const cancelBtn = useRef();
 	const overlay = useRef();
 
-	// const { currentUser } = useAuth();
+	const { checkUser } = useAuth();
+	const currentUser = checkUser();
 
 	// User Input fields
 	const senderCompany = useRef();
@@ -108,7 +109,7 @@ export default function Overlay(props) {
 	const dropdownValueChecker = (e) => {
 		// console.log();
 		paymentExpected.current.value = e.target.innerHTML;
-		setFormData({ ...formData, due: parseInt(e.target.innerText.replace(/[^0-9\.]/g, ''), 10) });
+		setFormData({ ...formData, due: parseInt(e.target.innerText.replace(/[^0-9.]/g, ''), 10) });
 		setDropdown('dropdown-closed');
 	};
 

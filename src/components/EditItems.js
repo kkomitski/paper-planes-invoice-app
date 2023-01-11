@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setItem, clearItems } from '../features/item';
+import { setItem } from '../features/item';
 
 export default function EditItems({ id, name, price, quantity, total, editDisable, invoiceID }) {
 	const [totalState, setTotalState] = useState(`£${total}`);

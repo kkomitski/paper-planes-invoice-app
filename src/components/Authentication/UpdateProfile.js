@@ -1,18 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase-config';
-import { confirmPasswordReset } from 'firebase/auth';
 import { useEffect } from 'react';
 import {
 	getDownloadURL,
 	getStorage,
 	ref,
-	uploadBytes,
 	uploadBytesResumable,
 } from 'firebase/storage';
-import { useSelector } from 'react-redux';
 
 export function UpdateProfile({ activeComponent, setActiveComponent }) {
 	const emailRef = useRef();
@@ -29,7 +26,10 @@ export function UpdateProfile({ activeComponent, setActiveComponent }) {
 	const updateCompanyLogo = useRef();
 	const photoInputForm = useRef();
 
-	const { currentUser, updateUserPassword, updateUserEmail, logout } = useAuth();
+	const { checkUser, updateUserPassword, updateUserEmail, logout } = useAuth();
+	
+	const currentUser = checkUser();
+
 	const blankForm = {};
 
 	const [error, setError] = useState('');

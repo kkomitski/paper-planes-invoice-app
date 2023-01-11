@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-// import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import plane from '../../assets/maxresdefault.png';
@@ -7,27 +6,22 @@ import plane from '../../assets/maxresdefault.png';
 export function ForgotPassword() {
 	const emailRef = useRef();
 
-	const { currentUser, reset } = useAuth();
+	const { reset } = useAuth();
 
 	const [error, setError] = useState('');
-	// const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState('');
 
-	async function handleSubmit(e) {
+	// Try to reset password using the context rest operation
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		try {
 			setError('');
-			// setLoading(true);
-			// await login(emailRef.current.value, passwordRef.current.value);
 			await reset(emailRef.current.value);
 			setMessage('Check inbox for further instructions');
 		} catch (e) {
-			console.log(e.message);
 			setError('Failed to reset password');
 		}
-
-		// setLoading(false);
 	}
 
 	return (
@@ -39,10 +33,8 @@ export function ForgotPassword() {
 					<div className='error'>{error}</div>
 					<div className='success'>{message}</div>
 					<br />
-					{/* {currentUser ? currentUser.email : 'noone logged'} */}
 					<label htmlFor='email'>email</label> <br />
 					<input type='text' id='email' ref={emailRef} />
-					{/* <button disabled={loading}>Log In</button> */}
 					<br />
 					<button className='btn'>Reset</button>
 					<br />

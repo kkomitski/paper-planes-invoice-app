@@ -6,77 +6,100 @@ import {
 	sendPasswordResetEmail,
 	updateEmail,
 	updatePassword,
-	setPersistence,
-	browserSessionPersistence,
-	browserLocalPersistence
 } from 'firebase/auth';
 import { auth } from '../firebase-config';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../features/currentUser';
 import cryptoJs from 'crypto-js';
+import idleTimeout from 'idle-timeout';
 
 const AuthContext = React.createContext();
-
-const createUser = createUserWithEmailAndPassword;
-const logInUser = signInWithEmailAndPassword;
-const signOutUser = signOut;
-const resetPassword = sendPasswordResetEmail;
 
 export function useAuth() {
 	return useContext(AuthContext);
 }
 
+// Provider with all the user operations
 export function AuthProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState('');
 
-	// const currentUserStore = 
-	const dispatch = useDispatch();
-	const currentUserStore = useSelector((state) => state.currentUser);
+	const [loggedUser, setLoggedUser] = useState(null);
+	const [persistance, setPersistance] = useState(false)
+
 
 	function signup(email, password) {
-		return createUser(auth, email, password);
+		return createUserWithEmailAndPassword(auth, email, password);
 	}
 
-	function login(email, password) {
-		return logInUser(auth, email, password);
+	function login(email, password, isPersistant) {
+		// isPersistant takes a radio input from the login page that results in the user login being persistant if set to true
+		setPersistance(isPersistant)
+		return signInWithEmailAndPassword(auth, email, password);
 	}
 
 	function logout() {
-		return signOutUser(auth);
+		return signOut(auth);
 	}
 
 	function reset(email) {
-		return resetPassword(auth, email);
+		return sendPasswordResetEmail(auth, email);
 	}
 
 	function updateUserEmail(email) {
-		return updateEmail(currentUser, email);
+		return updateEmail(loggedUser, email);
 	}
 
 	function updateUserPassword(password) {
-		return updatePassword(currentUser, password);
+		return updatePassword(loggedUser, password);
 	}
 
+	// Checks user login persistance preferences
+	function checkUser () {
+
+		if(localStorage.encuser){ // If persistance was requested save encrypted details to local storage and serve
+			const key = process.env.REACT_APP_CRYPT_KEY
+			const bytes = cryptoJs.AES.decrypt(localStorage.encuser, key)
+			const user = JSON.parse(bytes.toString(cryptoJs.enc.Utf8))
+			return user
+		} else if (loggedUser) { // If persistance was rejected only serve from state memory
+			return loggedUser
+		} else { // Reject
+			return false
+		}
+	}
+
+	// On first render start a authentication state change listener
 	useEffect(() => {
-		
 		auth.onAuthStateChanged((user) => {
-			// console.log("auth state changed")
-			// if (isMounted) {
+
+			// Generate an idle timer that would logout and clear all stored data on expiry
+			const timeout = idleTimeout( () => {
+				setLoggedUser(false)
+				window.localStorage.removeItem('encuser')
+			}, { element: document, timeout: 15 * 60 * 1000, loop: false } )
+			timeout.pause()
+
+
+			// If listener returns a user, encrypt user data and save to local storage
 				if (user) {
-					const cipher = cryptoJs.AES.encrypt(JSON.stringify(user), process.env.REACT_APP_CRYPT_KEY).toString()
-					window.localStorage.setItem('encuser', cipher)
-					setCurrentUser(JSON.parse(window.localStorage.user));
+					setLoggedUser(user)
+					
+					if(persistance){ // Encrypt and save to local storage
+						const cipher = cryptoJs.AES.encrypt(JSON.stringify(user), process.env.REACT_APP_CRYPT_KEY).toString()
+						window.localStorage.setItem('encuser', cipher)
+					}
+					
+					// Timeout session (currently 15 minutes)
+					timeout.resume()
+
 				} else {
+
+					// If listener returns null - log out and delete user data from local storage
 					window.localStorage.removeItem('encuser')
-					console.log('user-signed out');
+					timeout.destroy()
 				}
 				// }
 			});
+	}, [persistance]);
 
-		// return () => unsubscribe;
-	}, []);
-
-	const value = { currentUser, signup, login, logout, reset, updateUserEmail, updateUserPassword };
+	const value = { checkUser, signup, login, logout, reset, updateUserEmail, updateUserPassword };
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

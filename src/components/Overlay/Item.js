@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import trash from '../../assets/trash-solid.svg';
 
 export default function Item(props) {
-	const { removeItem, id, name, price, quantity } = props;
+	const { removeItem, id } = props;
 	const [total, setTotal] = useState('');
 	// console.log(props);
 	// const [currentItemPrice, setCurrentItemPrice] = useState('');
