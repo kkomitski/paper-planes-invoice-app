@@ -14,8 +14,6 @@ export default function EditItems({ id, name, price, quantity, total, editDisabl
 		total: `£${total}`,
 	});
 
-	//
-
 	const editName = useRef();
 	const editPrice = useRef();
 	const editQuantity = useRef();

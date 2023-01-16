@@ -131,6 +131,7 @@ export function UpdateProfile({ activeComponent, setActiveComponent }) {
 	};
 
 	let progress = 0;
+	
 	const uploadCompanyLogo = async (e) => {
 		if (e.target.files[0]) {
 			const format = e.target.files[0].name.split('.').at(-1);

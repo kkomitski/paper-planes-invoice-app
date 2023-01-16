@@ -167,6 +167,7 @@ export default function Overlay(props) {
 	};
 
 	let newInvoiceID = 0;
+	
 	const invoicesIDRef = doc(db, 'users', currentUser.email);
 	const generateInvoiceID = async () => {
 		const invoicesIDs = await getDoc(invoicesIDRef);
